@@ -1,0 +1,3849 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Beauty Ambassadors | Premier Hair Salon &amp; Spa in Alpharetta, GA</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Three.js for Marco 3D Barber Avatar Guide -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+  <!-- Tone.js for Procedural Luxury Intro & Header Sound Effects -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+
+  <!-- Editorial & Handwritten Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <script>
+    if (typeof tailwind !== 'undefined') {
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              canvas: 'var(--bg-canvas)',
+              surface: 'var(--bg-surface)',
+              card: 'var(--bg-card)',
+              elevated: 'var(--bg-elevated)',
+              ink: 'var(--text-ink)',
+              inkMuted: 'var(--text-muted)',
+              gold: 'var(--accent-gold)',
+              goldBright: 'var(--accent-gold-bright)',
+              goldSoft: 'var(--accent-gold-soft)',
+              hairline: 'var(--border-hairline)',
+            },
+            fontFamily: {
+              serif: ['"Cormorant Garamond"', 'Georgia', 'serif'],
+              sans: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
+              hand: ['"Caveat"', 'cursive'],
+            }
+          }
+        }
+      };
+    }
+  </script>
+
+  <style>
+    /* ==========================================================================
+       1. HIGH-CONTRAST DUAL LUXURY PALETTE (SILK IVORY & NOCTURNE VELVET)
+       ========================================================================== */
+    :root {
+      --bg-canvas: #FCFBF8;
+      --bg-surface: #F2EDE4;
+      --bg-card: #FFFFFF;
+      --bg-elevated: rgba(252, 251, 248, 0.94);
+      --text-ink: #161310;
+      --text-muted: #4C453D;
+      --accent-gold: #8C6226;
+      --accent-gold-bright: #C69C53;
+      --accent-gold-soft: rgba(140, 98, 38, 0.11);
+      --border-hairline: rgba(22, 19, 16, 0.14);
+      --cursor-ring: rgba(140, 98, 38, 0.72);
+      --shadow-editorial: 0 24px 52px -18px rgba(22, 19, 16, 0.14);
+      --shadow-card: 0 10px 30px -12px rgba(22, 19, 16, 0.10);
+    }
+
+    html.theme-nocturne {
+      --bg-canvas: #0D0C0A;
+      --bg-surface: #171512;
+      --bg-card: #211E19;
+      --bg-elevated: rgba(17, 15, 12, 0.94);
+      --text-ink: #FAF7F2;
+      --text-muted: #CFC6B8;
+      --accent-gold: #E8C57E;
+      --accent-gold-bright: #F2D69B;
+      --accent-gold-soft: rgba(232, 197, 126, 0.16);
+      --border-hairline: rgba(250, 247, 242, 0.16);
+      --cursor-ring: rgba(232, 197, 126, 0.8);
+      --shadow-editorial: 0 32px 70px -18px rgba(0, 0, 0, 0.72);
+      --shadow-card: 0 16px 36px -14px rgba(0, 0, 0, 0.55);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      background-color: var(--bg-canvas);
+      color: var(--text-ink);
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 16px;
+      line-height: 1.65;
+      overflow-x: hidden;
+      transition: background-color 0.65s cubic-bezier(0.22, 1, 0.36, 1),
+                  color 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Tactile Paper Grain */
+    .paper-grain {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 45;
+      opacity: 0.022;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+    #scroll-progress-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 3px;
+      width: 0%;
+      z-index: 120;
+      background: linear-gradient(90deg, var(--accent-gold), var(--accent-gold-bright));
+      pointer-events: none;
+      transition: width 0.12s ease-out;
+    }
+    .salon-arch { border-radius: 999px 999px 24px 24px; }
+
+    /* High-Contrast Eyebrow Pill Badge */
+    .eyebrow-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.38rem 0.9rem;
+      border-radius: 999px;
+      background: var(--accent-gold-soft);
+      border: 1px solid rgba(140, 98, 38, 0.28);
+      color: var(--accent-gold);
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+    html.theme-nocturne .eyebrow-pill {
+      border-color: rgba(232, 197, 126, 0.34);
+    }
+
+    /* Elevated Luxury Card Surface */
+    .atelier-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-hairline);
+      border-radius: 1.25rem;
+      box-shadow: var(--shadow-card);
+      transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+                  border-color 0.35s ease,
+                  box-shadow 0.35s ease;
+    }
+    .atelier-card:hover {
+      border-color: var(--accent-gold-bright);
+      box-shadow: var(--shadow-editorial);
+    }
+
+    /* Upgraded Sculpted Pill Buttons */
+    .atelier-btn {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+      background: var(--bg-card);
+      color: var(--text-ink);
+      border: 1.5px solid var(--border-hairline);
+      border-radius: 999px;
+      padding: 0.85rem 1.85rem;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      overflow: hidden;
+      box-shadow: 0 6px 18px -8px rgba(22, 19, 16, 0.18);
+      transition: color 0.35s ease,
+                  border-color 0.35s ease,
+                  transform 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+                  box-shadow 0.35s ease;
+      cursor: pointer;
+    }
+    .atelier-btn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--text-ink);
+      transform: scaleY(0);
+      transform-origin: bottom;
+      transition: transform 0.38s cubic-bezier(0.22, 1, 0.36, 1);
+      z-index: 0;
+    }
+    .atelier-btn:hover {
+      color: var(--bg-canvas);
+      border-color: var(--text-ink);
+      transform: translateY(-2px);
+      box-shadow: 0 14px 28px -10px rgba(22, 19, 16, 0.3);
+    }
+    .atelier-btn:hover::before { transform: scaleY(1); }
+    .atelier-btn:active { transform: translateY(0) scale(0.98); }
+    .atelier-btn > * { position: relative; z-index: 1; }
+
+    .atelier-btn-gold {
+      background: linear-gradient(135deg, #D9B46B 0%, #B08035 100%);
+      border: 1.5px solid #9B6E28;
+      color: #161310;
+      box-shadow: 0 12px 26px -10px rgba(140, 98, 38, 0.55), inset 0 1px 0 rgba(255, 250, 238, 0.55);
+    }
+    .atelier-btn-gold::before { background: var(--text-ink); }
+    .atelier-btn-gold:hover {
+      color: var(--bg-canvas);
+      border-color: var(--text-ink);
+      box-shadow: 0 16px 32px -10px rgba(22, 19, 16, 0.42);
+    }
+
+    /* Upgraded Icon & Secondary Controls */
+    .atelier-icon-btn {
+      width: 2.75rem;
+      height: 2.75rem;
+      border-radius: 999px;
+      background: var(--bg-card);
+      color: var(--text-ink);
+      border: 1.5px solid var(--border-hairline);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      font-weight: 600;
+      box-shadow: var(--shadow-card);
+      transition: all 0.25s ease;
+      cursor: pointer;
+    }
+    .atelier-icon-btn:hover {
+      background: var(--text-ink);
+      color: var(--bg-canvas);
+      border-color: var(--text-ink);
+      transform: translateY(-1px);
+    }
+
+    /* Readable Form Inputs */
+    .atelier-input {
+      width: 100%;
+      background: var(--bg-card);
+      color: var(--text-ink);
+      border: 1.5px solid var(--border-hairline);
+      border-radius: 0.75rem;
+      padding: 0.75rem 1rem;
+      font-size: 0.92rem;
+      transition: border-color 0.25s ease, box-shadow 0.25s ease;
+    }
+    .atelier-input:focus {
+      outline: none;
+      border-color: var(--accent-gold);
+      box-shadow: 0 0 0 3px var(--accent-gold-soft);
+    }
+
+    /* Animated Header Entrance */
+    header.atelier-header {
+      transform: translateY(-100%);
+      opacity: 0;
+      transition: transform 0.9s cubic-bezier(0.22, 1, 0.36, 1),
+                  opacity 0.8s ease,
+                  background-color 0.5s ease,
+                  box-shadow 0.4s ease;
+    }
+    body.header-ready header.atelier-header {
+      transform: translateY(0);
+      opacity: 1;
+    }
+    header.atelier-header.is-scrolled {
+      box-shadow: 0 12px 35px -16px rgba(0, 0, 0, 0.16);
+    }
+
+    /* ==========================================================================
+       2. 3-ACT SALON MOTION GRAPHICS INTRO
+       ========================================================================== */
+    #salon-intro {
+      position: fixed;
+      inset: 0;
+      z-index: 140;
+      background: transparent;
+      color: #F5F1EA;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      transition: opacity 0.55s ease, visibility 0.55s;
+    }
+    #salon-intro.is-hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    /* Split Velvet-Obsidian Curtains sliced open by the intro shears */
+    .intro-curtain-top,
+    .intro-curtain-bottom {
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 50.5%;
+      background: #0B0A08;
+      z-index: 1;
+      transition: transform 0.95s cubic-bezier(0.76, 0, 0.24, 1);
+      will-change: transform;
+    }
+    .intro-curtain-top {
+      top: 0;
+      border-bottom: 1px solid rgba(212, 180, 131, 0.16);
+    }
+    .intro-curtain-bottom {
+      bottom: 0;
+      border-top: 1px solid rgba(212, 180, 131, 0.16);
+    }
+    #salon-intro.curtain-open .intro-curtain-top {
+      transform: translateY(-104%);
+    }
+    #salon-intro.curtain-open .intro-curtain-bottom {
+      transform: translateY(104%);
+    }
+
+    /* Luminous Golden Silk Thread Seam across the center */
+    .intro-scissor-seam {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      height: 2px;
+      margin-top: -1px;
+      z-index: 8;
+      background: linear-gradient(90deg, transparent, rgba(212, 180, 131, 0.85) 15%, #F6E0B5 50%, rgba(212, 180, 131, 0.85) 85%, transparent);
+      transform: scaleX(0);
+      opacity: 0;
+      transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.35s ease;
+      pointer-events: none;
+    }
+    #salon-intro.act-cut .intro-scissor-seam {
+      transform: scaleX(1);
+      opacity: 1;
+    }
+    #salon-intro.curtain-open .intro-scissor-seam {
+      opacity: 0;
+      transition: opacity 0.25s ease;
+    }
+
+    /* Articulated Brass Salon Shears slicing across the intro */
+    #intro-scissor-runner {
+      position: absolute;
+      top: 50%;
+      left: -120px;
+      width: 112px;
+      height: 112px;
+      margin-top: -56px;
+      z-index: 12;
+      pointer-events: none;
+      opacity: 0;
+      filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.65)) drop-shadow(0 0 14px rgba(230, 201, 155, 0.45));
+    }
+    #salon-intro.act-cut #intro-scissor-runner {
+      opacity: 1;
+      animation: introScissorSlice 0.92s cubic-bezier(0.32, 0.04, 0.28, 1) forwards;
+    }
+    @keyframes introScissorSlice {
+      0% { left: -120px; opacity: 1; }
+      88% { left: calc(100% - 10px); opacity: 1; }
+      100% { left: calc(100% + 90px); opacity: 0; }
+    }
+    .intro-blade-a,
+    .intro-blade-b {
+      transform-origin: 48px 48px;
+    }
+    #salon-intro.act-cut .intro-blade-a {
+      animation: introSnipA 0.16s ease-in-out infinite;
+    }
+    #salon-intro.act-cut .intro-blade-b {
+      animation: introSnipB 0.16s ease-in-out infinite;
+    }
+    @keyframes introSnipA {
+      0%, 100% { transform: rotate(0deg); }
+      50% { transform: rotate(-20deg); }
+    }
+    @keyframes introSnipB {
+      0%, 100% { transform: rotate(0deg); }
+      50% { transform: rotate(20deg); }
+    }
+
+    #intro-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 3;
+      transition: opacity 0.5s ease;
+    }
+    #salon-intro.curtain-open #intro-canvas {
+      opacity: 0;
+    }
+    .intro-svg-stage {
+      position: relative;
+      z-index: 5;
+      width: min(320px, 78vw);
+      height: min(420px, 60vh);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.75s cubic-bezier(0.65, 0, 0.35, 1), opacity 0.55s ease;
+    }
+    #salon-intro.act-cut .intro-svg-stage {
+      transform: scale(0.94);
+      opacity: 0.25;
+    }
+    #salon-intro.curtain-open .intro-svg-stage {
+      transform: scale(1.18);
+      opacity: 0;
+    }
+    .intro-draw-path {
+      stroke-dasharray: 1200;
+      stroke-dashoffset: 1200;
+      transition: stroke-dashoffset 1.8s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    #salon-intro.act-2 .intro-draw-path {
+      stroke-dashoffset: 0;
+    }
+    .intro-portal-photo {
+      opacity: 0;
+      transform: scale(1.12);
+      transition: opacity 1.1s ease 0.45s, transform 1.4s cubic-bezier(0.22, 1, 0.36, 1) 0.45s;
+    }
+    #salon-intro.act-2 .intro-portal-photo {
+      opacity: 0.72;
+      transform: scale(1);
+    }
+    #salon-intro.curtain-open .intro-footer-controls {
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    /* ==========================================================================
+       3. HERO FOCUS -> COMPRESS -> JUMBLE -> CONVERGE -> GLASS SHATTER OVERLAY
+       ========================================================================== */
+    #hero-bombard-overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 35;
+      overflow: hidden;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.45s ease;
+    }
+    #hero-bombard-overlay.is-active {
+      opacity: 1;
+    }
+    #hero-bombard-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+    #hero-bombard-tools {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+    .bombard-tool-node {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 78px;
+      height: 78px;
+      margin-left: -39px;
+      margin-top: -39px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 32% 28%, #FFFDF9 0%, #F4ECDF 74%, #E3D3BA 100%);
+      border: 2px solid #B68B4C;
+      box-shadow: 0 14px 32px rgba(46, 31, 18, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      will-change: transform, opacity;
+    }
+    .bombard-tool-node svg {
+      width: 46px;
+      height: 46px;
+    }
+
+    /* ==========================================================================
+       4. HERO TYPOGRAPHY REVEALS, BUTTONS & ARCH STYLING
+       ========================================================================== */
+    .hero-content-wrap {
+      opacity: 0;
+      transform: translateY(20px) scale(0.985);
+      transition: opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1),
+                  transform 0.95s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    body.hero-unveiled .hero-content-wrap {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    .line-mask { overflow: hidden; display: block; }
+    .line-reveal {
+      display: block;
+      transform: translateY(108%);
+      opacity: 0;
+      transition: transform 1s cubic-bezier(0.22, 1, 0.36, 1),
+                  opacity 0.85s ease;
+    }
+    body.hero-unveiled .line-reveal { transform: translateY(0%); opacity: 1; }
+    .delay-1 { transition-delay: 0.08s; }
+    .delay-2 { transition-delay: 0.2s; }
+    .delay-3 { transition-delay: 0.32s; }
+
+    .ink-link { position: relative; display: inline-block; }
+    .ink-link::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: -3px;
+      width: 100%;
+      height: 1px;
+      background: var(--accent-gold);
+      transform: scaleX(0);
+      transform-origin: right;
+      transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .ink-link:hover::after { transform: scaleX(1); transform-origin: left; }
+
+    @keyframes kenBurnsSlow {
+      0% { transform: scale(1) translate(0, 0); }
+      50% { transform: scale(1.07) translate(-1%, -1%); }
+      100% { transform: scale(1) translate(0, 0); }
+    }
+    .ken-burns { animation: kenBurnsSlow 20s ease-in-out infinite; }
+
+    /* ==========================================================================
+       5. INTERNAL SALON ANIMATIONS (PERSISTENT OVER SCROLLING)
+          - SCRATCH-CARD MAKEUP BRUSH PHOTO REVEAL
+          - SCISSOR-CUT SECTION REVEAL
+          - CALIPER FRAMING & SERUM DROP RIPPLE
+       ========================================================================== */
+    .brush-reveal-wrap {
+      position: relative;
+      overflow: hidden;
+    }
+    .brush-scratch-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 8;
+      pointer-events: none;
+      transition: opacity 0.45s ease;
+    }
+    .brush-wand {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 92px;
+      height: 24px;
+      z-index: 12;
+      pointer-events: none;
+      opacity: 0;
+      transform-origin: 12% 50%;
+      filter: drop-shadow(0 8px 14px rgba(0, 0, 0, 0.35));
+      transition: opacity 0.25s ease;
+    }
+
+    /* Scissor-Cut Section Reveal */
+    .scissor-cut-stage {
+      position: relative;
+      overflow-x: clip;
+    }
+    .scissor-veil-top,
+    .scissor-veil-bottom {
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 50%;
+      max-height: 52vh;
+      background: var(--bg-canvas);
+      z-index: 20;
+      pointer-events: none;
+      transition: transform 0.95s cubic-bezier(0.76, 0, 0.24, 1), opacity 0.55s ease 0.45s;
+    }
+    .scissor-veil-top { top: 0; border-bottom: 1px dashed rgba(184, 149, 100, 0.6); }
+    .scissor-veil-bottom { top: 50%; border-top: 1px dashed rgba(184, 149, 100, 0.6); }
+    .scissor-cut-stage.is-cut .scissor-veil-top { transform: translateY(-104%); opacity: 0; }
+    .scissor-cut-stage.is-cut .scissor-veil-bottom { transform: translateY(104%); opacity: 0; }
+
+    .scissor-runner {
+      position: absolute;
+      top: 220px;
+      left: -64px;
+      width: 58px;
+      height: 58px;
+      margin-top: -29px;
+      z-index: 25;
+      pointer-events: none;
+      opacity: 0;
+    }
+    .scissor-cut-stage.is-cutting .scissor-runner {
+      opacity: 1;
+      animation: scissorGlideAcross 0.95s cubic-bezier(0.32, 0.04, 0.28, 1) forwards;
+    }
+    @keyframes scissorGlideAcross {
+      0% { left: -64px; opacity: 1; }
+      85% { left: calc(100% - 20px); opacity: 1; }
+      100% { left: calc(100% + 48px); opacity: 0; }
+    }
+    .scissor-blade-a { transform-origin: 26px 26px; }
+    .scissor-blade-b { transform-origin: 26px 26px; }
+    .scissor-cut-stage.is-cutting .scissor-blade-a { animation: snipA 0.19s ease-in-out infinite; }
+    .scissor-cut-stage.is-cutting .scissor-blade-b { animation: snipB 0.19s ease-in-out infinite; }
+    @keyframes snipA { 0%, 100% { transform: rotate(0deg); } 50% { transform: rotate(-18deg); } }
+    @keyframes snipB { 0%, 100% { transform: rotate(0deg); } 50% { transform: rotate(18deg); } }
+
+    /* Caliper Precision Framing */
+    .caliper-frame { position: relative; display: inline-block; padding: 0.45rem 1rem; }
+    .caliper-corner {
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      border-color: var(--accent-gold);
+      opacity: 0;
+      transition: transform 0.75s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.6s ease;
+    }
+    .caliper-tl { top: 0; left: 0; border-top: 1.5px solid; border-left: 1.5px solid; transform: translate(-14px, -14px); }
+    .caliper-tr { top: 0; right: 0; border-top: 1.5px solid; border-right: 1.5px solid; transform: translate(14px, -14px); }
+    .caliper-bl { bottom: 0; left: 0; border-bottom: 1.5px solid; border-left: 1.5px solid; transform: translate(-14px, 14px); }
+    .caliper-br { bottom: 0; right: 0; border-bottom: 1.5px solid; border-right: 1.5px solid; transform: translate(14px, 14px); }
+    .caliper-frame.is-framed .caliper-corner { opacity: 1; transform: translate(0, 0); }
+
+    /* Serum Drop & Ripple */
+    .serum-drop-stage { position: relative; height: 54px; width: 120px; }
+    .serum-droplet {
+      position: absolute;
+      left: 50%;
+      top: 0;
+      width: 10px;
+      height: 14px;
+      margin-left: -5px;
+      background: radial-gradient(circle at 35% 30%, #FFF3D6, #C9A26B);
+      border-radius: 50% 50% 50% 50% / 65% 65% 35% 35%;
+      opacity: 0;
+    }
+    .serum-ripple {
+      position: absolute;
+      left: 50%;
+      bottom: 6px;
+      width: 12px;
+      height: 6px;
+      margin-left: -6px;
+      border: 1px solid var(--accent-gold);
+      border-radius: 999px;
+      opacity: 0;
+    }
+    .serum-drop-stage.is-dropping .serum-droplet {
+      animation: dropFall 0.75s cubic-bezier(0.55, 0.05, 0.85, 0.25) forwards;
+    }
+    .serum-drop-stage.is-dropping .serum-ripple-1 {
+      animation: rippleExpand 1.1s ease-out 0.68s forwards;
+    }
+    .serum-drop-stage.is-dropping .serum-ripple-2 {
+      animation: rippleExpand 1.2s ease-out 0.88s forwards;
+    }
+    @keyframes dropFall {
+      0% { transform: translateY(-8px) scale(0.7); opacity: 0; }
+      20% { opacity: 1; }
+      95% { transform: translateY(34px) scale(1); opacity: 1; }
+      100% { transform: translateY(38px) scale(1.3, 0.4); opacity: 0; }
+    }
+    @keyframes rippleExpand {
+      0% { transform: scale(1); opacity: 0.9; }
+      100% { transform: scale(7.5, 2.8); opacity: 0; }
+    }
+
+    /* Editorial Shimmer Sweep */
+    .shimmer-heading { position: relative; display: inline-block; overflow: hidden; }
+    .shimmer-heading::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(110deg, transparent 25%, rgba(230, 201, 155, 0.42) 50%, transparent 75%);
+      transform: translateX(-130%);
+      pointer-events: none;
+    }
+    .shimmer-heading.is-shimmering::after {
+      animation: headingShimmer 1.15s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+    @keyframes headingShimmer {
+      to { transform: translateX(130%); }
+    }
+
+    /* Service Accordion & Floating Preview */
+    .service-drawer {
+      display: grid;
+      grid-template-rows: 0fr;
+      transition: grid-template-rows 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .service-row.is-open .service-drawer { grid-template-rows: 1fr; }
+    .service-drawer-inner { overflow: hidden; }
+    .service-row-title { transition: transform 0.38s cubic-bezier(0.22, 1, 0.36, 1), color 0.35s ease; }
+    .service-row:hover .service-row-title { transform: translateX(10px); color: var(--accent-gold); }
+
+    #floating-service-preview {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 230px;
+      height: 290px;
+      pointer-events: none;
+      z-index: 60;
+      opacity: 0;
+      transform: translate3d(-999px, -999px, 0) scale(0.92);
+      transition: opacity 0.28s ease;
+      border-radius: 130px 130px 14px 14px;
+      overflow: hidden;
+      border: 1px solid var(--accent-gold);
+      box-shadow: var(--shadow-editorial);
+      background: var(--bg-surface);
+    }
+    #floating-service-preview.is-active { opacity: 1; }
+
+    /* Custom Lerping Cursor */
+    #atelier-cursor {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 58px;
+      height: 58px;
+      border-radius: 999px;
+      border: 1px solid var(--cursor-ring);
+      pointer-events: none;
+      z-index: 95;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 9px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--text-ink);
+      background: var(--bg-elevated);
+      backdrop-filter: blur(6px);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    @media (hover: none), (pointer: coarse) {
+      #atelier-cursor, #floating-service-preview { display: none !important; }
+    }
+
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+    /* ==========================================================================
+       6. MARCO — 3D BARBER AVATAR GUIDE (ROYAL COBALT & BARBER-CRIMSON HUD)
+       ========================================================================== */
+    #marco-guide-root {
+      position: fixed;
+      bottom: 18px;
+      right: 18px;
+      z-index: 88;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 10px;
+      pointer-events: none;
+      transition: left 0.9s cubic-bezier(0.22, 1, 0.36, 1),
+                  right 0.9s cubic-bezier(0.22, 1, 0.36, 1),
+                  transform 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+                  opacity 0.55s ease;
+      opacity: 0;
+      transform: translateY(45px) scale(0.85);
+    }
+    #marco-guide-root.is-visible {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+    #marco-guide-root.is-left {
+      right: auto;
+      left: 18px;
+      align-items: flex-start;
+    }
+
+    .marco-bubble {
+      pointer-events: auto;
+      width: min(300px, calc(100vw - 36px));
+      background: linear-gradient(155deg, #0D1B36 0%, #162B52 100%);
+      color: #F4F8FF;
+      border: 1px solid rgba(96, 165, 250, 0.45);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 22px 48px rgba(7, 15, 34, 0.48);
+    }
+    .barber-pole-stripe {
+      height: 5px;
+      width: 100%;
+      background: repeating-linear-gradient(
+        -55deg,
+        #DC2626 0px, #DC2626 10px,
+        #FFFFFF 10px, #FFFFFF 18px,
+        #2563EB 18px, #2563EB 28px,
+        #FFFFFF 28px, #FFFFFF 36px
+      );
+      background-size: 56px 100%;
+      animation: barberStripeSlide 2.6s linear infinite;
+    }
+    @keyframes barberStripeSlide {
+      from { background-position: 0 0; }
+      to { background-position: 56px 0; }
+    }
+
+    .marco-canvas-wrap {
+      pointer-events: auto;
+      width: 168px;
+      height: 196px;
+      cursor: grab;
+      position: relative;
+      filter: drop-shadow(0 18px 24px rgba(13, 27, 54, 0.35));
+    }
+    .marco-canvas-wrap:active { cursor: grabbing; }
+
+    #marco-summon-btn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 88;
+      display: none;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 16px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #102447, #1E3A8A);
+      color: #FFFFFF;
+      border: 1.5px solid #60A5FA;
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      box-shadow: 0 14px 30px rgba(15, 23, 42, 0.4);
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body class="selection:bg-gold selection:text-canvas">
+
+  <!-- Tactile Paper Grain & Top Golden Progress Line -->
+  <div class="paper-grain" aria-hidden="true"></div>
+  <div id="scroll-progress-bar" aria-hidden="true"></div>
+
+  <!-- Custom Desktop Lerping Cursor -->
+  <div id="atelier-cursor" aria-hidden="true">
+    <span id="atelier-cursor-label">Atelier</span>
+  </div>
+
+  <!-- Floating Desktop Service Preview -->
+  <div id="floating-service-preview" aria-hidden="true">
+    <img id="floating-preview-img" src="" alt="Treatment preview" class="w-full h-full object-cover" referrerpolicy="no-referrer" />
+    <div class="absolute inset-x-0 bottom-0 p-3 bg-gradient-to-t from-black/75 via-black/35 to-transparent text-white">
+      <p id="floating-preview-tag" class="text-[10px] uppercase tracking-[0.2em] text-[#E6C99B]"></p>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       3-ACT SALON MOTION GRAPHICS INTRO
+       ======================================================================== -->
+  <div id="salon-intro" role="dialog" aria-label="Beauty Ambassadors GA Salon Motion Intro">
+    <!-- Split Obsidian Curtains that part after the scissor slice -->
+    <div class="intro-curtain-top" aria-hidden="true"></div>
+    <div class="intro-curtain-bottom" aria-hidden="true"></div>
+
+    <canvas id="intro-canvas"></canvas>
+
+    <!-- Golden Silk Cut Seam & Articulated Salon Shears -->
+    <div class="intro-scissor-seam" aria-hidden="true"></div>
+    <div id="intro-scissor-runner" aria-hidden="true">
+      <svg viewBox="0 0 96 96" fill="none" class="w-full h-full">
+        <g class="intro-blade-a">
+          <path d="M 28 28 L 88 48 L 38 45 Z" fill="#E8CCA0" stroke="#1B1815" stroke-width="1.5" />
+          <path d="M 44 43 L 84 48" stroke="#FFFDF9" stroke-width="1.2" stroke-linecap="round" opacity="0.85" />
+          <circle cx="20" cy="27" r="10.5" stroke="#D4B483" stroke-width="3.6" fill="#141210" />
+        </g>
+        <g class="intro-blade-b">
+          <path d="M 28 68 L 88 48 L 38 51 Z" fill="#C9A26B" stroke="#1B1815" stroke-width="1.5" />
+          <path d="M 44 53 L 84 48" stroke="#FFF8EB" stroke-width="1" stroke-linecap="round" opacity="0.65" />
+          <circle cx="20" cy="69" r="10.5" stroke="#B89564" stroke-width="3.6" fill="#141210" />
+        </g>
+        <circle cx="46" cy="48" r="3.4" fill="#FFFDF9" stroke="#1B1815" stroke-width="1.2" />
+      </svg>
+    </div>
+
+    <div class="intro-svg-stage">
+      <!-- Mirror Arch Portal Photo -->
+      <div class="intro-portal-photo absolute inset-6 salon-arch overflow-hidden">
+        <img
+          src="https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=85"
+          alt="Beauty Ambassadors GA Sanctuary"
+          class="w-full h-full object-cover ken-burns"
+          referrerpolicy="no-referrer"
+        />
+        <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-black/35"></div>
+      </div>
+
+      <!-- Animated SVG Salon Mirror Arch & Botanical Pipette Line Art -->
+      <svg viewBox="0 0 320 420" class="relative z-10 w-full h-full" fill="none">
+        <!-- Outer Salon Mirror Arch -->
+        <path
+          class="intro-draw-path"
+          d="M 32 396 L 32 162 C 32 78, 90 22, 160 22 C 230 22, 288 78, 288 162 L 288 396 Z"
+          stroke="#D4B483"
+          stroke-width="1.5"
+        />
+        <!-- Inner Filigree Arch -->
+        <path
+          class="intro-draw-path"
+          d="M 46 384 L 46 164 C 46 88, 97 36, 160 36 C 223 36, 274 88, 274 164 L 274 384 Z"
+          stroke="rgba(212,180,131,0.45)"
+          stroke-width="1"
+        />
+        <!-- Minimal Botanical Serum Pipette Top Accent -->
+        <path
+          class="intro-draw-path"
+          d="M 160 58 L 160 92 M 151 74 C 151 67, 169 67, 169 74"
+          stroke="#E6C99B"
+          stroke-width="1.2"
+          stroke-linecap="round"
+        />
+        <!-- Monogram -->
+        <text x="160" y="218" text-anchor="middle" fill="#F5F1EA" font-family="'Cormorant Garamond', Georgia, serif" font-size="56" font-style="italic" letter-spacing="4">BA</text>
+        <text x="160" y="254" text-anchor="middle" fill="#D4B483" font-family="'Plus Jakarta Sans', sans-serif" font-size="9.5" letter-spacing="5">ALPHARETTA • SALON &amp; SPA</text>
+      </svg>
+    </div>
+
+    <div class="intro-footer-controls absolute bottom-8 inset-x-0 z-20 flex flex-col items-center gap-3 px-6 text-center">
+      <p id="intro-act-label" class="text-[10px] uppercase tracking-[0.34em] text-[#D4B483]">
+        Act I • Essence &amp; Silk
+      </p>
+      <div class="flex items-center gap-5">
+        <button
+          type="button"
+          onclick="skipSalonIntro()"
+          class="text-[11px] uppercase tracking-[0.26em] text-[#F5F1EA]/75 hover:text-[#D4B483] border-b border-transparent hover:border-[#D4B483] pb-0.5 transition-colors cursor-pointer"
+        >
+          Skip Intro →
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       STICKY ANIMATED EDITORIAL HEADER
+       ======================================================================== -->
+  <header id="site-header" class="atelier-header sticky top-0 z-50 bg-elevated backdrop-blur-md border-b border-hairline">
+    <div class="max-w-7xl mx-auto px-5 sm:px-10 h-20 flex items-center justify-between gap-4">
+      <a href="#top" class="flex items-center gap-3 group" data-cursor="Home">
+        <span class="w-10 h-10 rounded-full border-2 border-gold bg-goldSoft flex items-center justify-center font-serif italic font-semibold text-base text-gold group-hover:bg-gold group-hover:text-canvas transition-colors">
+          BA
+        </span>
+        <div>
+          <span class="font-serif text-xl sm:text-2xl font-medium tracking-tight block leading-none text-ink">
+            Beauty Ambassadors
+          </span>
+          <span class="text-[11px] font-medium uppercase tracking-[0.2em] text-inkMuted block mt-1">
+            Alpharetta, GA • Hair Salon &amp; Spa
+          </span>
+        </div>
+      </a>
+
+      <nav class="hidden lg:flex items-center gap-8 text-xs font-semibold uppercase tracking-[0.16em]">
+        <a href="#lookbook" class="ink-link text-ink hover:text-gold transition-colors">Atelier</a>
+        <a href="#rituals" class="ink-link text-ink hover:text-gold transition-colors">Menu</a>
+        <a href="#process" class="ink-link text-ink hover:text-gold transition-colors">Process</a>
+        <a href="#consultation" class="ink-link text-ink hover:text-gold transition-colors">Quiz</a>
+      </nav>
+
+      <div class="flex items-center gap-2.5 sm:gap-3.5">
+        <button
+          type="button"
+          onclick="replaySalonIntro()"
+          class="hidden md:inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full border border-hairline bg-card text-xs font-medium text-ink hover:border-gold hover:text-gold transition-colors cursor-pointer"
+        >
+          <span>↺</span>
+          <span>Replay Intro</span>
+        </button>
+
+        <button
+          type="button"
+          id="theme-toggle-btn"
+          onclick="toggleAtelierTheme()"
+          class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full border border-hairline bg-card text-xs font-semibold text-ink hover:border-gold hover:text-gold transition-colors cursor-pointer"
+        >
+          <span>☾</span>
+          <span>Nocturne</span>
+        </button>
+
+        <button
+          type="button"
+          onclick="openBookingDrawer()"
+          data-cursor="Reserve"
+          class="atelier-btn atelier-btn-gold magnetic-el !py-2.5 !px-5"
+        >
+          <span>Reserve</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ========================================================================
+       MAIN CONTENT
+       ======================================================================== -->
+  <main id="top">
+
+    <!-- ======================================================================
+         HERO SECTION (WITH FOCUS -> COMPRESS -> JUMBLE -> SHATTER REVEAL)
+         ====================================================================== -->
+    <section id="hero-section" class="relative min-h-[86vh] flex items-center border-b border-hairline overflow-hidden">
+
+      <!-- Hero Focus -> Compress -> Jumble -> Converge -> Glass Shatter Overlay -->
+      <div id="hero-bombard-overlay" aria-hidden="true">
+        <canvas id="hero-bombard-canvas"></canvas>
+        <div id="hero-bombard-tools"></div>
+      </div>
+
+      <div class="hero-content-wrap relative z-10 max-w-7xl mx-auto w-full px-5 sm:px-10 py-14 lg:py-20">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-10 items-center">
+
+          <!-- Left Editorial Copy -->
+          <div class="lg:col-span-6 space-y-7">
+            <div class="eyebrow-pill">
+              <span class="w-2 h-2 rounded-full bg-gold"></span>
+              <span>875 N Main St, Suite #356 • Alpharetta, GA</span>
+            </div>
+
+            <h1 class="font-serif text-5xl sm:text-6xl xl:text-[4.6rem] font-normal leading-[1.04] tracking-tight text-ink">
+              <span class="line-mask"><span class="line-reveal delay-1">Premier Hair,</span></span>
+              <span class="line-mask"><span class="line-reveal delay-2 italic font-medium text-gold">Radiant Skin</span></span>
+              <span class="line-mask"><span class="line-reveal delay-3">&amp; Spa Artistry.</span></span>
+            </h1>
+
+            <p class="text-base sm:text-lg text-inkMuted max-w-lg leading-relaxed font-normal">
+              Alpharetta’s premier full-service hair salon &amp; spa—offering expert cuts, balayage &amp; global color, Dermalogica &amp; Hydro facials, keratin &amp; hair spa, waxing &amp; threading, bridal makeup, lashes, and henna mehendi.
+            </p>
+
+            <div class="flex flex-wrap items-center gap-4 pt-1">
+              <button
+                type="button"
+                onclick="openBookingDrawer()"
+                data-cursor="Book"
+                class="atelier-btn atelier-btn-gold magnetic-el"
+              >
+                <span>Book an Appointment</span>
+                <span>→</span>
+              </button>
+              <a href="#rituals" data-cursor="Menu" class="atelier-btn magnetic-el">
+                <span>Explore Services</span>
+              </a>
+            </div>
+
+            <!-- Metrics Bar + Replay Hero Burst -->
+            <div class="grid grid-cols-3 gap-4 pt-7 border-t border-hairline max-w-lg items-center">
+              <div class="p-3 rounded-xl bg-card border border-hairline">
+                <p class="font-serif text-2xl sm:text-3xl font-semibold text-ink">4.9 ★</p>
+                <p class="text-[11px] font-semibold uppercase tracking-[0.14em] text-inkMuted mt-0.5">518+ Reviews</p>
+              </div>
+              <div class="p-3 rounded-xl bg-card border border-hairline">
+                <p class="font-serif text-2xl sm:text-3xl font-semibold text-ink">7 Days</p>
+                <p class="text-[11px] font-semibold uppercase tracking-[0.14em] text-inkMuted mt-0.5">Walk-Ins Welcome</p>
+              </div>
+              <div class="text-right">
+                <button
+                  type="button"
+                  onclick="playHeroBombardReveal()"
+                  class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-goldSoft border border-gold/40 text-xs font-semibold text-gold hover:bg-gold hover:text-canvas transition-colors cursor-pointer"
+                >
+                  <span>✦</span>
+                  <span>Replay Burst</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Split-Arch Composition + Scratch-Card Brush Reveal Portrait -->
+          <div class="lg:col-span-6 relative flex justify-center lg:justify-end">
+            <div class="relative w-full max-w-md sm:max-w-lg">
+              <!-- Main Salon Arch Frame -->
+              <div class="salon-arch overflow-hidden border border-hairline p-3 bg-card shadow-2xl">
+                <div class="salon-arch overflow-hidden aspect-[3/4] relative bg-surface">
+                  <img
+                    src="https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=1000&q=85"
+                    alt="Dermalogica & Hydro Facial Treatment at Beauty Ambassadors Alpharetta"
+                    class="w-full h-full object-cover ken-burns"
+                    referrerpolicy="no-referrer"
+                  />
+                  <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent"></div>
+                  <div class="absolute bottom-5 left-5 right-5 flex items-end justify-between text-white">
+                    <div>
+                      <p class="text-xs font-semibold uppercase tracking-[0.2em] text-[#F5D99B]">Signature Spa</p>
+                      <p class="font-serif text-2xl italic font-medium drop-shadow">Hydro &amp; Dermalogica Facials</p>
+                    </div>
+                    <span class="text-xs font-semibold tracking-wider uppercase bg-black/50 backdrop-blur-sm border border-white/40 rounded-full px-3 py-1">Alpharetta</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Scratch-Card Makeup Brush Reveal Overlapping Glow Portrait -->
+              <div
+                id="hero-parallax-portrait"
+                data-cursor="Brush"
+                class="brush-reveal-wrap hidden sm:block absolute -bottom-8 -left-12 w-52 rounded-2xl bg-card border border-hairline p-2.5 shadow-2xl"
+              >
+                <div class="aspect-[4/5] rounded-xl overflow-hidden relative">
+                  <img
+                    src="https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=650&q=85"
+                    alt="Bridal Glow & Hair Couture Finish"
+                    class="w-full h-full object-cover"
+                    referrerpolicy="no-referrer"
+                  />
+                </div>
+                <p class="font-hand text-xl font-semibold text-gold leading-none mt-2.5 px-1">Hair, Skin &amp; Bridal</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         01. LOOKBOOK — CALIPER FRAMING + SCRATCH-CARD BRUSH PLATES
+         ====================================================================== -->
+    <section id="lookbook" class="py-20 lg:py-28 border-b border-hairline">
+      <div class="max-w-7xl mx-auto px-5 sm:px-10 mb-10 flex flex-col sm:flex-row sm:items-end justify-between gap-6">
+        <div class="space-y-3">
+          <div class="eyebrow-pill">01 • Visual Archive</div>
+          <div>
+            <div class="caliper-frame">
+              <span class="caliper-corner caliper-tl"></span>
+              <span class="caliper-corner caliper-tr"></span>
+              <span class="caliper-corner caliper-bl"></span>
+              <span class="caliper-corner caliper-br"></span>
+              <h2 class="shimmer-heading font-serif text-4xl sm:text-5xl font-normal tracking-tight text-ink">
+                Inside the <span class="italic text-gold">Atelier</span>
+              </h2>
+            </div>
+          </div>
+        </div>
+        <div class="flex items-center gap-4">
+          <span class="font-hand text-2xl text-inkMuted">Drag plates or click to inspect</span>
+          <div class="flex gap-2.5">
+            <button type="button" onclick="scrollLookbook(-360)" class="atelier-icon-btn" aria-label="Scroll left">←</button>
+            <button type="button" onclick="scrollLookbook(360)" class="atelier-icon-btn" aria-label="Scroll right">→</button>
+          </div>
+        </div>
+      </div>
+
+      <div
+        id="lookbook-track"
+        data-cursor="Drag"
+        class="flex gap-6 overflow-x-auto no-scrollbar px-5 sm:px-10 pb-4 cursor-grab active:cursor-grabbing select-none"
+      >
+        <!-- Populated via JS with Scratch-Card Makeup Brush Reveal -->
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         02. TREATMENT MENU — SCISSOR-CUT SECTION REVEAL
+         ====================================================================== -->
+    <section id="rituals" class="scissor-cut-stage py-20 lg:py-28 border-b border-hairline">
+      <!-- Scissor Cut Veils & Articulated Brass Shears -->
+      <div class="scissor-veil-top" aria-hidden="true"></div>
+      <div class="scissor-veil-bottom" aria-hidden="true"></div>
+      <div class="scissor-runner" aria-hidden="true">
+        <svg viewBox="0 0 64 64" fill="none" class="w-full h-full">
+          <g class="scissor-blade-a">
+            <path d="M 18 18 L 56 32 L 24 30 Z" fill="#D4B483" stroke="#1B1815" stroke-width="1.2"/>
+            <circle cx="14" cy="18" r="6.5" stroke="#B89564" stroke-width="2.5" fill="#F9F6F1"/>
+          </g>
+          <g class="scissor-blade-b">
+            <path d="M 18 46 L 56 32 L 24 34 Z" fill="#C49A5A" stroke="#1B1815" stroke-width="1.2"/>
+            <circle cx="14" cy="46" r="6.5" stroke="#B89564" stroke-width="2.5" fill="#F9F6F1"/>
+          </g>
+          <circle cx="28" cy="32" r="2.2" fill="#1B1815"/>
+        </svg>
+      </div>
+
+      <div class="max-w-7xl mx-auto px-5 sm:px-10">
+        <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-8 mb-10">
+          <div class="space-y-3">
+            <div class="eyebrow-pill">02 • Complete Salon &amp; Spa Menu</div>
+            <h2 class="shimmer-heading font-serif text-4xl sm:text-5xl font-normal tracking-tight text-ink">
+              Services We <span class="italic text-gold">Provide</span>
+            </h2>
+          </div>
+          <div class="w-full lg:w-80 space-y-2">
+            <input
+              type="search"
+              id="service-search-input"
+              oninput="handleServiceSearch(this.value)"
+              placeholder="Search cuts, balayage, facials, henna..."
+              class="atelier-input !py-2.5 !rounded-full text-sm"
+              aria-label="Search salon services"
+            />
+            <p class="text-xs text-inkMuted pl-2">
+              Hover any service for a preview • Upfront quote provided during consultation.
+            </p>
+          </div>
+        </div>
+
+        <!-- Sticky Category Filter with Pill Tabs -->
+        <div class="sticky top-20 z-30 bg-elevated backdrop-blur-md border-y border-hairline py-3.5 mb-8 -mx-5 px-5 sm:mx-0 sm:px-0">
+          <div id="category-tabs" class="relative flex items-center gap-2.5 sm:gap-3 overflow-x-auto no-scrollbar">
+            <!-- Populated via JS -->
+          </div>
+        </div>
+
+        <!-- Service Accordion Rows -->
+        <div id="service-ledger" class="grid grid-cols-1 lg:grid-cols-2 gap-4 items-start">
+          <!-- Populated via JS -->
+        </div>
+
+        <!-- Special Offers & Hiring Banner from beautyambassadorsga.com/offers.html -->
+        <div class="mt-10 grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div class="atelier-card p-5 flex flex-col justify-between gap-3">
+            <div>
+              <span class="text-[11px] font-semibold uppercase tracking-[0.18em] text-gold">Special Offer</span>
+              <h3 class="font-serif text-2xl font-medium text-ink mt-1">Hair Styling &amp; Spa Promotions</h3>
+              <p class="text-sm text-inkMuted mt-1">Ask about our seasonal hair styling packages and spa promotions when you book.</p>
+            </div>
+            <button type="button" onclick="openBookingDrawer('silk-and-shine')" class="text-xs font-semibold uppercase tracking-[0.16em] text-gold hover:underline text-left cursor-pointer">Inquire &amp; Reserve →</button>
+          </div>
+          <div class="atelier-card p-5 flex flex-col justify-between gap-3">
+            <div>
+              <span class="text-[11px] font-semibold uppercase tracking-[0.18em] text-gold">Bundle Deal</span>
+              <h3 class="font-serif text-2xl font-medium text-ink mt-1">Waxing &amp; Facial Packages</h3>
+              <p class="text-sm text-inkMuted mt-1">Pair eyebrow threading, full-face waxing, and Dermalogica or Hydro facials for package savings.</p>
+            </div>
+            <button type="button" onclick="openBookingDrawer('hydro-facial')" class="text-xs font-semibold uppercase tracking-[0.16em] text-gold hover:underline text-left cursor-pointer">Book Package →</button>
+          </div>
+          <div class="atelier-card p-5 flex flex-col justify-between gap-3">
+            <div>
+              <span class="text-[11px] font-semibold uppercase tracking-[0.18em] text-gold">Careers • Alpharetta</span>
+              <h3 class="font-serif text-2xl font-medium text-ink mt-1">We Are Hiring Stylists!</h3>
+              <p class="text-sm text-inkMuted mt-1">Join the Beauty Ambassadors hair stylist &amp; esthetician team on North Main Street.</p>
+            </div>
+            <a href="mailto:contactus@beautyambassadorsga.com?subject=Stylist%20Application%20-%20Beauty%20Ambassadors%20GA" class="text-xs font-semibold uppercase tracking-[0.16em] text-gold hover:underline">Email Your Resume →</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         03. PROCESS — FOUR-STAGE SENSORY CHOREOGRAPHY & TOOLS IN MOTION
+         ====================================================================== -->
+    <section id="process" class="py-20 lg:py-28 border-b border-hairline bg-surface/40">
+      <div class="max-w-7xl mx-auto px-5 sm:px-10">
+        <!-- Header with Botanical Serum Drop & Ripple Animation -->
+        <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-8 mb-12">
+          <div class="space-y-3">
+            <div class="eyebrow-pill">03 • The Alpharetta Ritual</div>
+            <h2 class="shimmer-heading font-serif text-4xl sm:text-5xl font-normal tracking-tight text-ink">
+              Four-Stage Sensory <span class="italic text-gold">Choreography</span>
+            </h2>
+            <p class="text-base text-inkMuted max-w-xl">
+              Every appointment follows our unhurried four-stage salon &amp; spa rhythm—from upfront consultation and precision craft to botanical restoration.
+            </p>
+          </div>
+          <div class="flex items-center gap-4">
+            <div class="serum-drop-stage" aria-hidden="true">
+              <div class="serum-droplet"></div>
+              <div class="serum-ripple serum-ripple-1"></div>
+              <div class="serum-ripple serum-ripple-2"></div>
+            </div>
+            <span class="font-hand text-2xl text-gold">Pure Botanical Care</span>
+          </div>
+        </div>
+
+        <!-- 12-Column Sensory Stages + Scratch-Card Brush Reveal Photo Frame -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-start mb-12">
+          <div id="sensory-stage-list" class="lg:col-span-6 space-y-4">
+            <!-- Populated via JS -->
+          </div>
+
+          <div class="lg:col-span-6 lg:sticky lg:top-28">
+            <div class="atelier-card p-3.5 sm:p-4">
+              <div
+                id="sensory-brush-frame"
+                data-cursor="Brush"
+                class="brush-reveal-wrap aspect-[4/3] sm:aspect-[4/4] rounded-xl overflow-hidden relative bg-surface"
+              >
+                <img
+                  id="sensory-stage-img"
+                  src="https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=85"
+                  alt="Four-Stage Sensory Walkthrough"
+                  class="w-full h-full object-cover"
+                  referrerpolicy="no-referrer"
+                />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent"></div>
+                <div class="absolute bottom-5 left-5 right-5 text-white space-y-1">
+                  <p id="sensory-stage-badge" class="text-xs font-semibold uppercase tracking-[0.2em] text-[#F5D99B]">
+                    Stage 01 • Upfront Consultation &amp; Mapping
+                  </p>
+                  <p id="sensory-stage-caption" class="font-serif text-2xl italic font-medium drop-shadow">
+                    Personalized hair &amp; Dermalogica Face Mapping® consult.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Interactive Atelier Tools in Motion Showcase -->
+        <div class="atelier-card p-6 sm:p-8 relative overflow-hidden">
+          <canvas id="tool-motion-canvas" class="absolute inset-0 w-full h-full pointer-events-none"></canvas>
+          <div class="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+            <div class="space-y-2 max-w-xl">
+              <span class="text-xs font-semibold uppercase tracking-[0.2em] text-gold">Artistry in Motion</span>
+              <h3 id="active-tool-title" class="font-serif text-3xl font-medium text-ink">Master Styling Shears</h3>
+              <p id="active-tool-desc" class="text-sm sm:text-base text-inkMuted">
+                Balanced salon shears crafted for crisp women’s layers, men’s fades, and gentle kids’ cuts.
+              </p>
+            </div>
+            <div id="atelier-tool-buttons" class="flex flex-wrap gap-2.5">
+              <!-- Populated via JS -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         04. CONSULTATION TRIAGE — SCISSOR-CUT SECTION REVEAL
+         ====================================================================== -->
+    <section id="consultation" class="scissor-cut-stage py-20 lg:py-28 border-b border-hairline">
+      <div class="scissor-veil-top" aria-hidden="true"></div>
+      <div class="scissor-veil-bottom" aria-hidden="true"></div>
+      <div class="scissor-runner" aria-hidden="true">
+        <svg viewBox="0 0 64 64" fill="none" class="w-full h-full">
+          <g class="scissor-blade-a">
+            <path d="M 18 18 L 56 32 L 24 30 Z" fill="#D4B483" stroke="#1B1815" stroke-width="1.2"/>
+            <circle cx="14" cy="18" r="6.5" stroke="#B89564" stroke-width="2.5" fill="#F9F6F1"/>
+          </g>
+          <g class="scissor-blade-b">
+            <path d="M 18 46 L 56 32 L 24 34 Z" fill="#C49A5A" stroke="#1B1815" stroke-width="1.2"/>
+            <circle cx="14" cy="46" r="6.5" stroke="#B89564" stroke-width="2.5" fill="#F9F6F1"/>
+          </g>
+          <circle cx="28" cy="32" r="2.2" fill="#1B1815"/>
+        </svg>
+      </div>
+
+      <div class="max-w-5xl mx-auto px-5 sm:px-10">
+        <div class="text-center max-w-xl mx-auto mb-12 space-y-3">
+          <div class="eyebrow-pill">04 • Bespoke Triage</div>
+          <h2 class="shimmer-heading font-serif text-4xl sm:text-5xl font-normal tracking-tight text-ink">
+            Find Your <span class="italic text-gold">Ritual</span>
+          </h2>
+          <p class="text-base text-inkMuted">
+            Three quick questions to prescribe the exact facial, brow, or hair couture treatment for today.
+          </p>
+        </div>
+
+        <div class="atelier-card p-6 sm:p-10">
+          <div class="flex items-center justify-between border-b border-hairline pb-4 mb-8 text-xs font-semibold uppercase tracking-[0.18em]">
+            <span id="triage-step-label" class="text-gold">Step 01 of 03 • Primary Focus</span>
+            <button type="button" onclick="resetTriage()" class="px-3 py-1 rounded-full border border-hairline text-ink hover:border-gold hover:text-gold transition-colors cursor-pointer">
+              Reset Quiz
+            </button>
+          </div>
+          <div id="triage-container"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ========================================================================
+       MOUSE-REACTIVE GOLDEN SILK-WAVE & MINERAL-DUST FINALE FOOTER
+       ======================================================================== -->
+  <footer id="vip-footer" class="relative py-20 lg:py-28 bg-surface overflow-hidden">
+    <canvas id="silk-wave-canvas" class="absolute inset-0 w-full h-full pointer-events-none"></canvas>
+
+    <div class="relative z-10 max-w-7xl mx-auto px-5 sm:px-10">
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-12 pb-14 border-b border-hairline">
+        <div class="md:col-span-5 space-y-4">
+          <div class="eyebrow-pill">Move Cursor for Mineral Dust • Click for Sparks</div>
+          <p class="font-serif text-4xl sm:text-5xl font-normal text-ink">
+            Beauty Ambassadors <span class="italic text-gold">GA</span>
+          </p>
+          <p class="text-base text-inkMuted max-w-sm leading-relaxed">
+            <a href="https://www.google.com/maps/search/?api=1&query=875+N+Main+St+Suite+356+Alpharetta+GA+30009" target="_blank" rel="noopener noreferrer" class="hover:text-gold transition-colors">
+              875 N Main St, Suite #356, Alpharetta, GA 30009
+            </a>
+          </p>
+          <div class="space-y-1.5 text-sm">
+            <p><a href="tel:+17706741884" class="font-semibold text-ink hover:text-gold transition-colors">☎ (770) 674-1884</a></p>
+            <p><a href="mailto:contactus@beautyambassadorsga.com" class="text-inkMuted hover:text-gold transition-colors">✉ contactus@beautyambassadorsga.com</a></p>
+            <p><a href="https://www.instagram.com/beautyambassadorsga/" target="_blank" rel="noopener noreferrer" class="text-gold font-medium hover:underline">Instagram: @beautyambassadorsga</a></p>
+          </div>
+        </div>
+
+        <div class="md:col-span-4 space-y-2 text-sm sm:text-base">
+          <div class="flex items-center gap-3 mb-3">
+            <p class="text-xs font-semibold uppercase tracking-[0.2em] text-gold">Salon Timings</p>
+            <span id="salon-live-status" class="text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-goldSoft text-gold">Open 7 Days</span>
+          </div>
+          <p class="text-ink font-medium">Mon – Thu: <span class="text-inkMuted font-normal">10:00 AM – 7:00 PM</span></p>
+          <p class="text-ink font-medium">Fri – Sat: <span class="text-inkMuted font-normal">10:00 AM – 7:30 PM</span></p>
+          <p class="text-ink font-medium">Sunday: <span class="text-inkMuted font-normal">11:00 AM – 6:00 PM</span></p>
+          <p class="text-xs text-inkMuted pt-2">Walk-ins warmly welcomed • Wheelchair-accessible entrance &amp; parking.</p>
+        </div>
+
+        <div class="md:col-span-3 flex flex-col justify-between items-start md:items-end gap-6">
+          <button
+            type="button"
+            onclick="openBookingDrawer()"
+            class="atelier-btn atelier-btn-gold magnetic-el"
+          >
+            <span>Book an Appointment</span>
+          </button>
+          <a href="#top" class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-card border border-hairline text-xs font-semibold uppercase tracking-[0.16em] text-ink hover:border-gold hover:text-gold transition-colors">
+            <span>Back to Top ↑</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-inkMuted">
+        <p>© 2026 Beauty Ambassadors Salon &amp; Spa. All rights reserved.</p>
+        <p>875 N Main St, Suite #356 • Alpharetta, GA 30009</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ========================================================================
+       LOOKBOOK LIGHTBOX MODAL
+       ======================================================================== -->
+  <div
+    id="lookbook-lightbox"
+    class="fixed inset-0 z-[105] bg-black/80 backdrop-blur-md hidden items-center justify-center p-4 sm:p-8"
+    onclick="if(event.target === this) closeLightbox()"
+  >
+    <div class="relative max-w-3xl w-full rounded-2xl bg-card border border-hairline p-5 sm:p-7 shadow-2xl">
+      <button
+        type="button"
+        onclick="closeLightbox()"
+        class="atelier-icon-btn absolute top-4 right-4 z-10 !w-10 !h-10"
+        aria-label="Close lightbox"
+      >✕</button>
+      <div class="aspect-[16/10] rounded-xl overflow-hidden mb-5 bg-surface">
+        <img id="lightbox-img" src="" alt="Atelier Plate" class="w-full h-full object-cover" referrerpolicy="no-referrer" />
+      </div>
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <p id="lightbox-tag" class="text-xs font-semibold uppercase tracking-[0.2em] text-gold"></p>
+          <h3 id="lightbox-title" class="font-serif text-2xl sm:text-3xl text-ink mt-1"></h3>
+        </div>
+        <button type="button" onclick="closeLightbox(); openBookingDrawer();" class="atelier-btn atelier-btn-gold !py-2.5 !px-5">
+          <span>Reserve Similar Ritual</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       SLIDE-OVER CONCIERGE BOOKING DRAWER
+       ======================================================================== -->
+  <div
+    id="booking-overlay"
+    class="fixed inset-0 z-[115] bg-black/65 backdrop-blur-sm hidden justify-end"
+    onclick="if(event.target === this) closeBookingDrawer()"
+  >
+    <aside class="w-full max-w-md bg-canvas h-full border-l border-hairline p-6 sm:p-8 overflow-y-auto flex flex-col justify-between shadow-2xl">
+      <div>
+        <div class="flex items-center justify-between pb-5 border-b border-hairline mb-6">
+          <div>
+            <p class="text-xs font-semibold uppercase tracking-[0.2em] text-gold">Concierge Reservation</p>
+            <h3 class="font-serif text-3xl font-medium text-ink">Reserve Your Suite</h3>
+          </div>
+          <button type="button" onclick="closeBookingDrawer()" class="atelier-icon-btn !w-10 !h-10" aria-label="Close">✕</button>
+        </div>
+
+        <form id="booking-form" onsubmit="submitBooking(event)" class="space-y-5">
+          <div>
+            <label for="booking-service-select" class="block text-xs font-semibold uppercase tracking-[0.16em] text-ink mb-2">Selected Ritual</label>
+            <select id="booking-service-select" onchange="updateBookingSummary()" class="atelier-input"></select>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3 p-4 rounded-xl bg-card border border-hairline">
+            <div>
+              <span class="text-xs font-semibold uppercase tracking-[0.14em] text-inkMuted block">Category</span>
+              <span id="booking-duration" class="font-serif text-xl font-medium text-ink">Facial Treatment</span>
+            </div>
+            <div>
+              <span class="text-xs font-semibold uppercase tracking-[0.14em] text-inkMuted block">Pricing</span>
+              <span id="booking-price" class="font-serif text-xl font-semibold text-gold">Upfront Quote</span>
+            </div>
+          </div>
+
+          <div>
+            <label for="booking-date" class="block text-xs font-semibold uppercase tracking-[0.16em] text-ink mb-2">Preferred Date</label>
+            <input type="date" id="booking-date" required class="atelier-input" />
+          </div>
+
+          <div>
+            <span class="block text-xs font-semibold uppercase tracking-[0.16em] text-ink mb-2">Preferred Window</span>
+            <div class="grid grid-cols-3 gap-2.5">
+              <button type="button" onclick="selectSlot(this, '10:30 AM')" class="slot-btn rounded-xl border-2 border-gold bg-goldSoft py-2.5 text-xs font-semibold text-ink cursor-pointer transition-all">10:30 AM</button>
+              <button type="button" onclick="selectSlot(this, '1:30 PM')" class="slot-btn rounded-xl border border-hairline bg-card py-2.5 text-xs font-semibold text-ink hover:border-gold cursor-pointer transition-all">1:30 PM</button>
+              <button type="button" onclick="selectSlot(this, '4:30 PM')" class="slot-btn rounded-xl border border-hairline bg-card py-2.5 text-xs font-semibold text-ink hover:border-gold cursor-pointer transition-all">4:30 PM</button>
+            </div>
+          </div>
+
+          <div>
+            <label for="booking-name" class="block text-xs font-semibold uppercase tracking-[0.16em] text-ink mb-2">Full Name</label>
+            <input type="text" id="booking-name" required placeholder="Your full name" class="atelier-input" />
+          </div>
+
+          <div>
+            <label for="booking-email" class="block text-xs font-semibold uppercase tracking-[0.16em] text-ink mb-2">Email or Phone</label>
+            <input type="text" id="booking-email" required placeholder="you@domain.com or (770) 555-0199" class="atelier-input" />
+          </div>
+
+          <p id="booking-error" class="text-xs font-medium text-red-600 hidden"></p>
+
+          <button type="submit" class="atelier-btn atelier-btn-gold w-full">
+            <span>Request Appointment</span>
+          </button>
+
+          <a href="tel:+17706741884" class="atelier-btn w-full !py-2.5 text-center">
+            <span>Or Call (770) 674-1884</span>
+          </a>
+        </form>
+
+        <div id="booking-confirmation" class="hidden text-center py-10 space-y-4">
+          <div class="w-16 h-16 rounded-full border-2 border-gold bg-goldSoft text-gold flex items-center justify-center mx-auto text-2xl font-bold">✓</div>
+          <p class="text-xs font-semibold uppercase tracking-[0.22em] text-gold">Request Received</p>
+          <h4 class="font-serif text-3xl text-ink">See You in Alpharetta</h4>
+          <p id="booking-confirm-details" class="text-sm text-inkMuted leading-relaxed"></p>
+          <button type="button" onclick="resetBookingForm()" class="atelier-btn mt-4"><span>Book Another Service</span></button>
+        </div>
+      </div>
+      <p class="text-xs text-inkMuted pt-6 border-t border-hairline mt-6 leading-relaxed">
+        875 N Main St, Suite #356, Alpharetta, GA 30009. Please allow 24 hours notice for cancellations or rescheduling. Final pricing is confirmed upfront prior to service.
+      </p>
+    </aside>
+  </div>
+
+  <!-- ========================================================================
+       MARCO — 3D BARBER AVATAR GUIDE (ROYAL COBALT & BARBER-CRIMSON)
+       ======================================================================== -->
+  <div id="marco-guide-root" aria-label="Marco 3D Barber Guide">
+    <div class="marco-bubble">
+      <div class="barber-pole-stripe"></div>
+      <div class="p-3.5 space-y-2.5">
+        <div class="flex items-center justify-between gap-2">
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-sky-400 animate-pulse"></span>
+            <span class="text-[10px] uppercase tracking-[0.2em] text-sky-300 font-semibold">Marco • Chief Barber</span>
+          </div>
+          <div class="flex items-center gap-1.5">
+            <span id="marco-gesture-pill" class="text-[9px] uppercase tracking-wider px-2 py-0.5 rounded-full bg-red-600/85 text-white">Wave</span>
+            <button type="button" onclick="hideMarcoGuide()" class="text-xs text-sky-200/75 hover:text-white px-1 cursor-pointer" title="Send Marco on coffee break">✕</button>
+          </div>
+        </div>
+
+        <p id="marco-speech" class="text-xs leading-relaxed text-slate-100">
+          Whoa—barely dodged that shattered glass! Welcome to Beauty Ambassadors GA. Ready for a tour?
+        </p>
+
+        <!-- Quick Section Jump Pills -->
+        <div class="flex flex-wrap gap-1 pt-0.5">
+          <button type="button" onclick="marcoGoToSection(0)" class="px-2 py-0.5 text-[10px] rounded bg-white/10 hover:bg-sky-500/40 text-sky-100 cursor-pointer">Hero</button>
+          <button type="button" onclick="marcoGoToSection(1)" class="px-2 py-0.5 text-[10px] rounded bg-white/10 hover:bg-sky-500/40 text-sky-100 cursor-pointer">Atelier</button>
+          <button type="button" onclick="marcoGoToSection(2)" class="px-2 py-0.5 text-[10px] rounded bg-white/10 hover:bg-sky-500/40 text-sky-100 cursor-pointer">Menu</button>
+          <button type="button" onclick="marcoGoToSection(3)" class="px-2 py-0.5 text-[10px] rounded bg-white/10 hover:bg-sky-500/40 text-sky-100 cursor-pointer">Process</button>
+          <button type="button" onclick="marcoGoToSection(4)" class="px-2 py-0.5 text-[10px] rounded bg-white/10 hover:bg-sky-500/40 text-sky-100 cursor-pointer">Quiz</button>
+          <button type="button" onclick="marcoGoToSection(5)" class="px-2 py-0.5 text-[10px] rounded bg-white/10 hover:bg-sky-500/40 text-sky-100 cursor-pointer">VIP</button>
+        </div>
+
+        <!-- Tour & Gesture Controls -->
+        <div class="flex items-center gap-1.5 pt-1 border-t border-white/10">
+          <button type="button" onclick="marcoNextStop()" class="flex-1 py-1.5 px-2.5 rounded bg-red-600 hover:bg-red-500 text-[10px] uppercase tracking-wider font-semibold text-white cursor-pointer">
+            Next Stop →
+          </button>
+          <button type="button" id="marco-autotour-btn" onclick="toggleMarcoAutoTour()" class="py-1.5 px-2.5 rounded bg-sky-600/80 hover:bg-sky-500 text-[10px] uppercase tracking-wider text-white cursor-pointer">
+            Auto Tour
+          </button>
+          <button type="button" onclick="triggerMarcoNextGesture()" class="py-1.5 px-2.5 rounded bg-white/10 hover:bg-white/20 text-[10px] uppercase tracking-wider text-sky-100 cursor-pointer">
+            Pose
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div id="marco-canvas-wrap" class="marco-canvas-wrap" title="Click Marco for a gesture or drag to spin him!"></div>
+  </div>
+
+  <button id="marco-summon-btn" type="button" onclick="showMarcoGuide()">
+    <span>✂</span>
+    <span>Summon Marco</span>
+  </button>
+
+  <!-- ========================================================================
+       COMPLETE APPLICATION SCRIPT
+       ======================================================================== -->
+  <script>
+    /* ========================================================================
+       1. ATELIER DATA, BARBER TOOL SVGS & UI STATE
+       ======================================================================== */
+    const isFinePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+
+    let activeCategory = 'All Services';
+    let serviceSearchQuery = '';
+    let activeSensoryIdx = 0;
+    let activeToolMotionIdx = 0;
+    let triageStepIdx = 0;
+    let triageAnswers = {};
+    let selectedSlot = '10:30 AM';
+
+    const LOOKBOOK_PLATES = [
+      {
+        tag: 'Plate 01 • Hair Cuts & Styles',
+        title: 'Women, Men & Kids Styling & Updos',
+        image: 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=800&q=85'
+      },
+      {
+        tag: 'Plate 02 • Custom Color Bar',
+        title: 'Balayage, Ombre & Full Highlights',
+        image: 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=800&q=85'
+      },
+      {
+        tag: 'Plate 03 • Facial Sanctuary',
+        title: 'Dermalogica, Oxy & Hydro Facials',
+        image: 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=800&q=85'
+      },
+      {
+        tag: 'Plate 04 • Hair Spa & Keratin',
+        title: 'Silk & Shine, Deep Conditioning & Keratin',
+        image: 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=800&q=85'
+      },
+      {
+        tag: 'Plate 05 • Waxing, Threading & Lashes',
+        title: 'Precision Brows, Tinting & Mink Lashes',
+        image: 'https://images.unsplash.com/photo-1519415510236-718bdfcd89c8?auto=format&fit=crop&w=800&q=85'
+      },
+      {
+        tag: 'Plate 06 • Bridal & Henna Art',
+        title: 'Bridal Makeup, Party Glam & Mehendi',
+        image: 'https://images.unsplash.com/photo-1503951914875-452162b0f3f1?auto=format&fit=crop&w=800&q=85'
+      }
+    ];
+
+    const BARBER_TOOLS_SVGS = [
+      // 1. Barber Shears
+      `<svg viewBox="0 0 64 64" fill="none"><path d="M18 16L52 34L26 32Z" fill="#CBD5E1" stroke="#334155" stroke-width="1.6"/><path d="M18 48L52 30L26 32Z" fill="#94A3B8" stroke="#334155" stroke-width="1.6"/><circle cx="15" cy="18" r="7" stroke="#B68B4C" stroke-width="3" fill="#FFFDF9"/><circle cx="15" cy="46" r="7" stroke="#B68B4C" stroke-width="3" fill="#FFFDF9"/><circle cx="29" cy="32" r="2.5" fill="#1E293B"/></svg>`,
+      // 2. Straight Razor
+      `<svg viewBox="0 0 64 64" fill="none"><path d="M12 42L44 16L52 22L22 48Z" fill="#E2E8F0" stroke="#334155" stroke-width="1.6"/><path d="M12 42L36 52C40 54 44 51 44 47L16 37Z" fill="#7C3F1D" stroke="#451A03" stroke-width="1.5"/><circle cx="16" cy="41" r="2.5" fill="#D4B483"/></svg>`,
+      // 3. Tortoiseshell Comb
+      `<svg viewBox="0 0 64 64" fill="none"><rect x="10" y="20" width="44" height="10" rx="4" fill="#854D0E" stroke="#451A03" stroke-width="1.5"/><path d="M14 30V46M20 30V46M26 30V46M32 30V46M38 30V46M44 30V46M50 30V46" stroke="#A16207" stroke-width="2.4" stroke-linecap="round"/></svg>`,
+      // 4. Fade Clipper
+      `<svg viewBox="0 0 64 64" fill="none"><rect x="20" y="18" width="24" height="36" rx="8" fill="#2F5233" stroke="#1B331E" stroke-width="1.6"/><rect x="22" y="10" width="20" height="9" rx="2" fill="#CBD5E1" stroke="#334155" stroke-width="1.4"/><path d="M26 10V15M32 10V15M38 10V15" stroke="#475569" stroke-width="1.6"/><circle cx="32" cy="36" r="4" fill="#D4B483"/></svg>`,
+      // 5. Badger Shaving Brush
+      `<svg viewBox="0 0 64 64" fill="none"><path d="M18 28C18 14 25 10 32 10C39 10 46 14 46 28Z" fill="#E7DFD3" stroke="#78716C" stroke-width="1.4"/><path d="M22 28H42L39 50C38 53 26 53 25 50L22 28Z" fill="#7C3F1D" stroke="#451A03" stroke-width="1.5"/><rect x="22" y="27" width="20" height="4" fill="#D4B483"/></svg>`,
+      // 6. Classic Barber Pole
+      `<svg viewBox="0 0 64 64" fill="none"><rect x="22" y="14" width="20" height="36" rx="10" fill="#FFFFFF" stroke="#334155" stroke-width="1.6"/><path d="M23 22L41 16M23 32L41 26M23 42L41 36" stroke="#DC2626" stroke-width="4"/><path d="M23 27L41 21M23 37L41 31M23 47L41 41" stroke="#2563EB" stroke-width="3.5"/><circle cx="32" cy="11" r="5" fill="#D4B483" stroke="#78350F" stroke-width="1.4"/><rect x="20" y="48" width="24" height="5" rx="2" fill="#D4B483"/></svg>`,
+      // 7. Terracotta Blow Dryer
+      `<svg viewBox="0 0 64 64" fill="none"><path d="M14 20H40C45 20 48 24 48 28C48 32 45 36 40 36H14L10 32V24L14 20Z" fill="#C87456" stroke="#7C2D12" stroke-width="1.6"/><path d="M32 36L38 52H30L25 36Z" fill="#1E293B"/><circle cx="38" cy="28" r="4" fill="#E2E8F0"/></svg>`,
+      // 8. Amber Mist Bottle
+      `<svg viewBox="0 0 64 64" fill="none"><rect x="22" y="24" width="20" height="30" rx="6" fill="#B45309" stroke="#78350F" stroke-width="1.6"/><path d="M27 24V16H37V24" fill="#1E293B"/><path d="M37 18H46L44 22H37Z" fill="#D4B483"/><rect x="25" y="34" width="14" height="10" rx="1" fill="#FEF3C7"/></svg>`,
+      // 9. Thinning Shears
+      `<svg viewBox="0 0 64 64" fill="none"><path d="M20 14L50 42L28 34Z" fill="#D4B483" stroke="#78350F" stroke-width="1.5"/><path d="M20 50L50 22L28 30Z" fill="#94A3B8" stroke="#334155" stroke-width="1.5"/><circle cx="17" cy="16" r="6" stroke="#78350F" stroke-width="2.5" fill="#FFFDF9"/><circle cx="17" cy="48" r="6" stroke="#78350F" stroke-width="2.5" fill="#FFFDF9"/></svg>`,
+      // 10. Neck Duster
+      `<svg viewBox="0 0 64 64" fill="none"><path d="M16 26C16 14 24 10 32 10C40 10 48 14 48 26Z" fill="#F5EDE0" stroke="#A8A29E" stroke-width="1.5"/><rect x="24" y="26" width="16" height="26" rx="4" fill="#1C1917" stroke="#44403C" stroke-width="1.5"/><rect x="24" y="25" width="16" height="4" fill="#D4B483"/></svg>`
+    ];
+
+    const SERVICE_CATEGORIES = [
+      'All Services',
+      'Hair Cuts & Styles',
+      'Colors',
+      'Facial Treatment',
+      'Hair Spa',
+      'Waxing & Threading',
+      'Chemical Services',
+      'Makeups',
+      'Lashes',
+      'Henna & Tattoos'
+    ];
+
+    const CATEGORY_IMAGES = {
+      'Hair Cuts & Styles': 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=700&q=80',
+      'Colors': 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=700&q=80',
+      'Facial Treatment': 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=700&q=80',
+      'Hair Spa': 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=700&q=80',
+      'Waxing & Threading': 'https://images.unsplash.com/photo-1519415510236-718bdfcd89c8?auto=format&fit=crop&w=700&q=80',
+      'Chemical Services': 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=700&q=80',
+      'Makeups': 'https://images.unsplash.com/photo-1519415510236-718bdfcd89c8?auto=format&fit=crop&w=700&q=80',
+      'Lashes': 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=700&q=80',
+      'Henna & Tattoos': 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=700&q=80'
+    };
+
+    const SERVICES = [
+      // Hair Cuts & Styles
+      { id: 'women-hair-cut', category: 'Hair Cuts & Styles', name: 'Women Hair Cut', duration: '45–60 Min', price: 'Quote at Consult', summary: 'Tailored precision haircut shaped to your face frame, natural texture, and everyday styling routine.', idealFor: 'Fresh layers, signature bobs, and healthy trims.', protocol: 'Consultation, tailored wet/dry cut, and finish.' },
+      { id: 'men-hair-cut', category: 'Hair Cuts & Styles', name: 'Men Hair Cut', duration: '30–45 Min', price: 'Quote at Consult', summary: 'Clean executive scissor cut, taper, or modern fade styled with sharp neckline detailing.', idealFor: 'Crisp everyday grooming and precision fades.', protocol: 'Style consult, clipper/scissor detailing, clean finish.' },
+      { id: 'kids-hair-cut', category: 'Hair Cuts & Styles', name: 'Kids Hair Cut', duration: '30 Min', price: 'Quote at Consult', summary: 'Gentle, patient, and stylish haircuts for kids in a comfortable family-friendly salon setting.', idealFor: 'Children under 13 (accompanied by parent/guardian).', protocol: 'Gentle detangle, neat cut, quick style.' },
+      { id: 'blow-dry', category: 'Hair Cuts & Styles', name: 'Blow Dry', duration: '45 Min', price: 'Quote at Consult', summary: 'Voluminous, silky round-brush blowout designed for lasting bounce and mirror shine.', idealFor: 'Events, weekends, or effortless weekly polish.', protocol: 'Heat protectant prep, tension blowout, smoothing serum.' },
+      { id: 'flat-iron', category: 'Hair Cuts & Styles', name: 'Flat Iron Styling', duration: '30–45 Min', price: 'Quote at Consult', summary: 'Glass-sleek thermal straightening with frizz control and protective shine mist.', idealFor: 'Sleek, straight editorial finishes.', protocol: 'Thermal shield, precision pass, anti-humidity seal.' },
+      { id: 'curling-iron', category: 'Hair Cuts & Styles', name: 'Curling Iron Styling', duration: '35–45 Min', price: 'Quote at Consult', summary: 'Soft Hollywood waves, beachy texture, or defined curls pinned for all-day hold.', idealFor: 'Parties, photoshoots, and date nights.', protocol: 'Heat prep, custom iron curls, flexible-hold mist.' },
+      { id: 'roller-set', category: 'Hair Cuts & Styles', name: 'Roller Set', duration: '60 Min', price: 'Quote at Consult', summary: 'Classic voluminous roller setting for long-lasting lift, smoothness, and soft movement.', idealFor: 'Full-bodied bounce with minimal direct heat.', protocol: 'Setting lotion, tension roll, hooded dry & brush-out.' },
+      { id: 'updos', category: 'Hair Cuts & Styles', name: "Updo's & Event Styling", duration: '60 Min', price: 'Quote at Consult', summary: 'Bespoke chignons, braided crowns, and modern sculptural updos for weddings and galas.', idealFor: 'Brides, bridesmaids, proms, and formal occasions.', protocol: 'Texture prep, pinned architecture, veil/pin placement.' },
+
+      // Colors
+      { id: 'root-touch-up', category: 'Colors', name: 'Root Touch Up', duration: '75 Min', price: 'Quote at Consult', summary: 'Seamless gray coverage and regrowth blending matched precisely to your existing shade.', idealFor: '4–6 week color maintenance.', protocol: 'Custom shade match, root application, gloss rinse.' },
+      { id: 'global-hair', category: 'Colors', name: 'Global Hair Color', duration: '90–120 Min', price: 'Quote at Consult', summary: 'Rich, uniform root-to-tip color saturation for luminous depth and radiant tone.', idealFor: 'Complete shade refresh or tone transformation.', protocol: 'Shade consult, full application, color-lock conditioning.' },
+      { id: 'full-highlights', category: 'Colors', name: 'Full Highlights', duration: '150 Min', price: 'Quote at Consult', summary: 'All-over dimensional foil highlights illuminating every layer from crown to nape.', idealFor: 'Maximum brightness and multi-tonal dimension.', protocol: 'Full-head foiling, custom toner gloss, nourishing mask.' },
+      { id: 'partial-highlights', category: 'Colors', name: 'Partial Highlights', duration: '120 Min', price: 'Quote at Consult', summary: 'Targeted sun-kissed highlights framing the face and top crown layers.', idealFor: 'Low-maintenance brightness between full sessions.', protocol: 'Strategic partial foils, custom glaze, blowout.' },
+      { id: 'balayage', category: 'Colors', name: 'Balayage', duration: '150–180 Min', price: 'Quote at Consult', summary: 'Hand-painted, lived-in highlights that melt organically for effortless grow-out.', idealFor: 'Soft, sunlit dimension with minimal upkeep.', protocol: 'Custom hand-painting, bond protection, toning gloss.' },
+      { id: 'ombre', category: 'Colors', name: 'Ombre', duration: '150 Min', price: 'Quote at Consult', summary: 'Smooth gradient color transition from deeper roots into luminous mid-lengths and ends.', idealFor: 'High-impact, fashion-forward color contrast.', protocol: 'Seamless gradient blend, custom gloss, hydration seal.' },
+      { id: 'accent-colors', category: 'Colors', name: 'Accent Colors', duration: '60–90 Min', price: 'Quote at Consult', summary: 'Statement face-framing ribbons or vibrant peek-a-boo pops customized to your vibe.', idealFor: 'Playful, expressive color accents.', protocol: 'Targeted sectioning, custom pigment, shine seal.' },
+      { id: 'individual-foil', category: 'Colors', name: 'Individual Foil', duration: '45 Min', price: 'Quote at Consult', summary: 'Per-foil dimensional placement to test brightness or add subtle framing strands.', idealFor: 'Quick touch-ups and subtle face framing.', protocol: 'Custom foil placement, rinse & tone.' },
+
+      // Facial Treatment
+      { id: 'hydro-facial', category: 'Facial Treatment', name: 'Hydro Facial', duration: '60 Min', price: 'Quote at Consult', summary: 'Deep hydro-dermabrasion cleansing, painless extraction, and antioxidant serum infusion for instant glass-skin glow.', idealFor: 'Congested pores, dullness, and deep hydration.', protocol: 'Hydro-exfoliation, vortex extraction, peptide infusion, SPF.' },
+      { id: 'dermalogica-facial', category: 'Facial Treatment', name: 'Dermalogica Facial', duration: '60 Min', price: 'Quote at Consult', summary: 'Clinical Face Mapping® analysis paired with customized Dermalogica actives for targeted skin health.', idealFor: 'Personalized skin barrier & texture results.', protocol: 'Face Mapping®, double cleanse, active masque, serum.' },
+      { id: 'oxy-facial', category: 'Facial Treatment', name: 'Oxy Facial', duration: '60 Min', price: 'Quote at Consult', summary: 'Oxygenating radiance therapy that revitalizes tired, stressed skin with plumping botanicals.', idealFor: 'Pre-event glow, fatigued or dull complexions.', protocol: 'Gentle exfoliation, oxygen infusion, cooling gel masque.' },
+      { id: 'bridal-facials', category: 'Facial Treatment', name: 'Bridal Facials', duration: '75 Min', price: 'Quote at Consult', summary: 'Luminous multi-step pre-wedding facial ritual designed for camera-ready clarity and supple glow.', idealFor: 'Brides and wedding party prep.', protocol: 'Deep brightening cleanse, lymphatic massage, radiance mask.' },
+      { id: 'skin-tightening', category: 'Facial Treatment', name: 'Skin Tightening Facial', duration: '60 Min', price: 'Quote at Consult', summary: 'Firming, collagen-supporting facial focused on lifted contours and refined elasticity.', idealFor: 'Fine lines, loss of firmness, jawline definition.', protocol: 'Sculpting massage, firming peptide complex, restorative veil.' },
+      { id: 'acne-treatments', category: 'Facial Treatment', name: 'Acne Treatments', duration: '60 Min', price: 'Quote at Consult', summary: 'Clarifying pore-purifying protocol that calms breakouts while protecting the skin barrier.', idealFor: 'Blemish-prone and congested skin.', protocol: 'Antibacterial cleanse, gentle extractions, soothing mask.' },
+      { id: 'oily-skin', category: 'Facial Treatment', name: 'Oily Skin Treatments', duration: '50 Min', price: 'Quote at Consult', summary: 'Sebum-balancing treatment that refines enlarged pores and restores a fresh matte finish.', idealFor: 'Excess shine and T-zone congestion.', protocol: 'Clarifying enzyme exfoliation, clay detox, light hydration.' },
+      { id: 'dry-skin', category: 'Facial Treatment', name: 'Dry Skin Treatments', duration: '50 Min', price: 'Quote at Consult', summary: 'Rich lipid and hyaluronic replenishment to soothe tightness, flaking, and dehydration.', idealFor: 'Dry, parched, or seasonal winter skin.', protocol: 'Creamy cleanse, hydrating ampoule, barrier-lock masque.' },
+      { id: 'organic-clean-up', category: 'Facial Treatment', name: 'Organic Clean Up', duration: '40 Min', price: 'Quote at Consult', summary: 'Botanical deep pore cleanse and gentle polish using pure plant-derived skincare.', idealFor: 'Monthly skin maintenance and natural radiance.', protocol: 'Organic cleanse, steam, gentle scrub, calming pack.' },
+      { id: 'express-facial', category: 'Facial Treatment', name: 'Express Facial', duration: '30 Min', price: 'Quote at Consult', summary: 'Targeted lunchtime skin refresh delivering clean pores and an instant healthy glow.', idealFor: 'Busy schedules and quick pick-me-ups.', protocol: 'Cleanse, exfoliate, rapid glow mask, moisturizer.' },
+      { id: 'skin-tan-pack', category: 'Facial Treatment', name: 'Skin Tan Pack', duration: '35 Min', price: 'Quote at Consult', summary: 'Brightening de-tan botanical pack that evens out sun exposure and restores natural luminosity.', idealFor: 'Sun-tanned or uneven skin tone.', protocol: 'Gentle prep, de-tan botanical pack, soothing hydration.' },
+      { id: 'bleach', category: 'Facial Treatment', name: 'Facial Bleach', duration: '25 Min', price: 'Quote at Consult', summary: 'Gentle skin-safe brightening treatment for an even, refreshed complexion.', idealFor: 'Softening fine facial hair visibility and brightening tone.', protocol: 'Sensitivity prep, mild activator, cooling aloe finish.' },
+
+      // Hair Spa
+      { id: 'silk-and-shine', category: 'Hair Spa', name: 'Silk and Shine Hair Spa', duration: '45 Min', price: 'Quote at Consult', summary: 'Cuticle-sealing luster ritual that transforms frizzy, dull strands into glossy silk.', idealFor: 'Frizz-prone, dry, or color-treated hair.', protocol: 'Botanical wash, silk serum mask, warm steam, rinse.' },
+      { id: 'deep-conditioning', category: 'Hair Spa', name: 'Deep Conditioning', duration: '40 Min', price: 'Quote at Consult', summary: 'Intensive moisture-infusion spa treatment to repair heat and environmental dryness.', idealFor: 'Brittle, dehydrated, or processed strands.', protocol: 'Clarifying wash, rich conditioning mask under steam.' },
+      { id: 'oil-treatments', category: 'Hair Spa', name: 'Oil Treatments (Men & Women)', duration: '45 Min', price: 'Quote at Consult', summary: 'Traditional warm botanical oil scalp massage that nourishes roots and melts away stress.', idealFor: 'Dry scalp, hair strength, and deep relaxation.', protocol: 'Warm herbal oil infusion, relaxing scalp massage, steam.' },
+      { id: 'treat-and-seal', category: 'Hair Spa', name: 'Treat & Seal', duration: '45 Min', price: 'Quote at Consult', summary: 'Restorative protein-moisture infusion that seals split cuticles for lasting smoothness.', idealFor: 'Chemically treated or fragile hair.', protocol: 'Targeted repair ampoule, cuticle-sealing veil.' },
+      { id: 'reenergize-spa', category: 'Hair Spa', name: 'Reenergize & Refreshing Treatment', duration: '40 Min', price: 'Quote at Consult', summary: 'Invigorating scalp detox and moisturizing spa treatment to revive flat, fatigued hair.', idealFor: 'Product buildup and scalp revitalization.', protocol: 'Detox scalp scrub, moisturizing mask, cool rinse.' },
+      { id: 'shampoo-conditioner', category: 'Hair Spa', name: 'Shampoo & Conditioner (Men & Women)', duration: '25 Min', price: 'Quote at Consult', summary: 'Relaxing salon wash and tailored conditioning cleanse with invigorating scalp massage.', idealFor: 'Fresh cleanse before styling or standalone refresh.', protocol: 'Double salon shampoo, hydrating conditioner, towel wrap.' },
+
+      // Waxing & Threading
+      { id: 'eyebrow-threading', category: 'Waxing & Threading', name: 'Eyebrows (Threading / Waxing)', duration: '15 Min', price: 'Quote at Consult', summary: 'Crisp, symmetrical eyebrow shaping tailored to highlight your natural arch and eyes.', idealFor: 'Clean, defined brows with zero harshness.', protocol: 'Arch consultation, precision threading or wax, aloe gel.' },
+      { id: 'eyebrow-tinting', category: 'Waxing & Threading', name: 'Eyebrow Tinting', duration: '20 Min', price: 'Quote at Consult', summary: 'Custom-blended semi-permanent brow tint for fuller, effortlessly defined arches.', idealFor: 'Light, sparse, or graying brows.', protocol: 'Shade selection, gentle brow tint, clean finish.' },
+      { id: 'full-face-threading', category: 'Waxing & Threading', name: 'Full Face (Upper Lip, Chin, Forehead, Side Burns)', duration: '30 Min', price: 'Quote at Consult', summary: 'Complete smooth facial hair removal—available as Full Face or individual Upper Lip, Chin, Forehead & Side Burns.', idealFor: 'Glass-smooth makeup application and clean contours.', protocol: 'Skin prep, precision threading or gentle wax, calming lotion.' },
+      { id: 'arms-underarms', category: 'Waxing & Threading', name: 'Arms & Under Arms Waxing', duration: '30 Min', price: 'Quote at Consult', summary: 'Hygienic, gentle waxing for long-lasting smooth skin across arms and underarms.', idealFor: 'Weeks of silky, stubble-free comfort.', protocol: 'Cleansing prep, low-temp comfort wax, soothing oil.' },
+
+      // Chemical Services
+      { id: 'keratin-treatment', category: 'Chemical Services', name: 'Keratin Treatment', duration: '150 Min', price: 'Quote at Consult', summary: 'Frizz-eliminating keratin smoothing infusion that cuts daily styling time in half.', idealFor: 'Humidity-prone, frizzy, or unruly textures.', protocol: 'Clarifying prep, keratin infusion, thermal seal.' },
+      { id: 'cystin-treatment', category: 'Chemical Services', name: 'Cystin Treatment', duration: '150 Min', price: 'Quote at Consult', summary: 'Formaldehyde-free amino acid smoothing treatment for naturally straight, healthy shine.', idealFor: 'Gentle de-frizzing while preserving hair integrity.', protocol: 'Cysteine complex application, precision thermal lock.' },
+      { id: 'permanent-straightening', category: 'Chemical Services', name: 'Permanent Hair Straightening', duration: '180 Min', price: 'Quote at Consult', summary: 'Long-term structural straightening delivering pin-straight, silky manageability.', idealFor: 'Clients seeking lasting straight transformation.', protocol: 'Strand assessment, restructuring bond cream, neutralizer.' },
+      { id: 'perm-service', category: 'Chemical Services', name: 'Perm Service', duration: '120–150 Min', price: 'Quote at Consult', summary: 'Modern waves, bouncy curls, or root volume customized with tailored rod sizing.', idealFor: 'Adding lasting body, texture, and movement.', protocol: 'Rod wrap, conditioning wave solution, neutralizer.' },
+
+      // Makeups
+      { id: 'bridal-makeup', category: 'Makeups', name: 'Bridal Make Up', duration: '90–120 Min', price: 'Quote at Consult', summary: 'Timeless, long-wear bridal artistry tailored to your attire, lighting, and skin tone.', idealFor: 'Weddings, receptions, and engagement ceremonies.', protocol: 'Skin prep, HD long-wear complexion, custom eye & lip artistry.' },
+      { id: 'party-makeup', category: 'Makeups', name: 'Party Make Up', duration: '60 Min', price: 'Quote at Consult', summary: 'Polished soft glam or bold evening makeup designed to photograph beautifully all night.', idealFor: 'Birthdays, galas, festivals, and family celebrations.', protocol: 'Hydrating primer, luminous complexion, custom glam finish.' },
+
+      // Lashes
+      { id: 'lash-extensions', category: 'Lashes', name: 'Lash Extensions (Classic & Mink)', duration: '90 Min', price: 'Quote at Consult', summary: 'Featherlight individual & plush Mink lash extensions customized for length and curl.', idealFor: 'Wake-up-ready flutter without mascara.', protocol: 'Eye-shape mapping, medical-grade lash bonding, brush-out.' },
+      { id: 'lash-clusters', category: 'Lashes', name: 'Lash Clusters', duration: '30 Min', price: 'Quote at Consult', summary: 'Quick, dramatic lash cluster application for instant weekend or event volume.', idealFor: 'Parties, weddings, and short-term glam.', protocol: 'Custom cluster placement, seamless lash-line blend.' },
+
+      // Henna & Tattoos
+      { id: 'henna-tattoos', category: 'Henna & Tattoos', name: 'Henna Tattoos (Mehendi Art)', duration: '30–90 Min', price: 'Quote at Consult', summary: 'Intricate traditional and contemporary organic henna mehendi designs for festivals and brides.', idealFor: 'Bridal mehendi, Diwali, Eid, and festive events.', protocol: 'Fresh natural henna cone artistry, rich stain care guide.' },
+      { id: 'body-tattoos', category: 'Henna & Tattoos', name: 'Custom Temporary Tattoos', duration: '20–45 Min', price: 'Quote at Consult', summary: 'Artistic custom tattoo designs crafted cleanly for special events and celebrations.', idealFor: 'Events, festivals, and personalized body art.', protocol: 'Design selection, clean skin application, quick dry.' }
+    ].map(s => ({ ...s, image: CATEGORY_IMAGES[s.category] || CATEGORY_IMAGES['Facial Treatment'] }));
+
+    const SENSORY_STAGES = [
+      {
+        num: '01',
+        title: 'Upfront Consultation & Mapping',
+        duration: '10 Min',
+        summary: 'Your stylist or esthetician listens to your hair, skin, or bridal goals and provides a clear, confirmed price quote before beginning.',
+        caption: 'Personalized hair & Dermalogica Face Mapping® consult.',
+        image: 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&w=900&q=85'
+      },
+      {
+        num: '02',
+        title: 'Master Salon & Esthetic Craft',
+        duration: '30–90 Min',
+        summary: 'Precision cuts, hand-painted balayage, keratin infusions, or gentle threading & waxing performed with meticulous care.',
+        caption: 'Expert hair artistry, color blending & clean precision.',
+        image: 'https://images.unsplash.com/photo-1503951914875-452162b0f3f1?auto=format&fit=crop&w=900&q=85'
+      },
+      {
+        num: '03',
+        title: 'Spa Restoration & Botanical Care',
+        duration: '20–45 Min',
+        summary: 'Relax into Hydro or Oxy facials, warm herbal oil massages, and Silk & Shine hair spa treatments that restore lasting radiance.',
+        caption: 'Deep hydration, warm oil massage & soothing masks.',
+        image: 'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=900&q=85'
+      },
+      {
+        num: '04',
+        title: 'The Alpharetta Reveal',
+        duration: '10 Min',
+        summary: 'Step out onto North Main Street feeling confident with polished styling, aftercare tips, and effortless Square checkout.',
+        caption: 'Polished mirror finish & effortless confidence.',
+        image: 'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=900&q=85'
+      }
+    ];
+
+    const ATELIER_TOOLS_MOTION = [
+      {
+        label: 'Precision Shears',
+        title: 'Master Styling Shears',
+        desc: 'Balanced salon shears crafted for crisp women’s layers, men’s fades, and gentle kids’ cuts.'
+      },
+      {
+        label: 'Color & Balayage',
+        title: 'Artisan Balayage Brush',
+        desc: 'Feathered color brushes for seamless root touch-ups, dimensional highlights, ombre, and balayage.'
+      },
+      {
+        label: 'Threading & Brows',
+        title: 'Organic Cotton Thread & Tint',
+        desc: 'Ultra-precise eyebrow threading, full-face shaping, and custom tinting for clean symmetry.'
+      },
+      {
+        label: 'Hydro & Dermalogica',
+        title: 'Clinical Spa Infusion',
+        desc: 'Dermalogica actives, Oxy therapy, and Hydro facial serums tailored to acne, oily, dry, or bridal skin.'
+      }
+    ];
+
+    const TRIAGE_STEPS = [
+      {
+        key: 'goal',
+        label: 'Step 01 of 03 • Primary Focus',
+        question: 'Which Beauty Ambassadors service are you looking for?',
+        options: [
+          { value: 'hair', title: 'Hair Cut, Color or Keratin', desc: 'Cuts, blow dry, balayage, highlights, or keratin/cystin smoothing.' },
+          { value: 'facial', title: 'Facial & Skin Care', desc: 'Hydro facial, Dermalogica, Oxy facial, acne, or bridal glow.' },
+          { value: 'brows', title: 'Waxing, Threading & Lashes', desc: 'Eyebrow threading, tinting, full face, waxing, or mink lashes.' },
+          { value: 'bridal', title: 'Bridal, Party Makeup & Henna', desc: 'Bridal/party glam, formal updos, and intricate mehendi art.' }
+        ]
+      },
+      {
+        key: 'style',
+        label: 'Step 02 of 03 • Desired Intensity',
+        question: 'What kind of transformation fits today?',
+        options: [
+          { value: 'refresh', title: 'Quick Refresh & Maintenance', desc: 'Express facial, root touch-up, blow dry, or brow threading.' },
+          { value: 'signature', title: 'Full Signature Experience', desc: 'Balayage, Hydro facial, keratin smoothing, or bridal glam.' }
+        ]
+      },
+      {
+        key: 'occasion',
+        label: 'Step 03 of 03 • Occasion',
+        question: 'Is this for everyday polish or a special celebration?',
+        options: [
+          { value: 'everyday', title: 'Everyday Confidence', desc: 'Effortless weekly or monthly self-care in Alpharetta.' },
+          { value: 'event', title: 'Wedding, Party or Festival', desc: 'Camera-ready glow, updos, lashes, and henna artistry.' }
+        ]
+      }
+    ];
+
+    /* ========================================================================
+       1B. PROCEDURAL ATELIER SOUNDSCAPE (TONE.JS — SOUND ON BY DEFAULT)
+           - Intro: Droplet & Ripples, Mirror Arch Chimes, Brass Scissor Snips
+           - Header: Curtain Whoosh & Arrival Chime
+           - Hero: Forced Air Compression, Pneumatic Release & Glass Shatter
+       ======================================================================== */
+    const AtelierAudio = {
+      enabled: true,
+      ready: false,
+      currentIntroAct: 0,
+      reverb: null,
+      padSynth: null,
+      harpSynth: null,
+      dropSynth: null,
+      chimeSynth: null,
+      snipNoise: null,
+      snipFilter: null,
+      bladeMetal: null,
+      curtainNoise: null,
+      curtainFilter: null,
+      airNoise: null,
+      airFilter: null,
+      tensionSynth: null,
+      impactSynth: null,
+      glassCrackNoise: null,
+      glassCrackFilter: null,
+      glassShardSynth: null,
+      tickSynth: null,
+
+      init() {
+        if (this.ready || typeof Tone === 'undefined') return;
+        try {
+          Tone.Destination.volume.value = -5;
+          this.reverb = new Tone.Reverb({ decay: 3.4, wet: 0.38 }).toDestination();
+
+          this.padSynth = new Tone.PolySynth(Tone.Synth, {
+            oscillator: { type: 'sine' },
+            envelope: { attack: 0.9, decay: 0.8, sustain: 0.45, release: 2.2 }
+          }).connect(this.reverb);
+          this.padSynth.volume.value = -16;
+
+          this.harpSynth = new Tone.PolySynth(Tone.Synth, {
+            oscillator: { type: 'triangle' },
+            envelope: { attack: 0.01, decay: 0.75, sustain: 0.05, release: 1.2 }
+          }).connect(this.reverb);
+          this.harpSynth.volume.value = -10;
+
+          this.dropSynth = new Tone.Synth({
+            oscillator: { type: 'sine' },
+            envelope: { attack: 0.005, decay: 0.3, sustain: 0, release: 0.5 }
+          }).connect(this.reverb);
+          this.dropSynth.volume.value = -9;
+
+          this.chimeSynth = new Tone.PolySynth(Tone.Synth, {
+            oscillator: { type: 'sine' },
+            envelope: { attack: 0.02, decay: 1.1, sustain: 0.15, release: 2.0 }
+          }).connect(this.reverb);
+          this.chimeSynth.volume.value = -10;
+
+          this.snipFilter = new Tone.Filter({ frequency: 4400, type: 'bandpass', Q: 3.5 }).connect(this.reverb);
+          this.snipNoise = new Tone.NoiseSynth({
+            noise: { type: 'white' },
+            envelope: { attack: 0.002, decay: 0.055, sustain: 0 }
+          }).connect(this.snipFilter);
+          this.snipNoise.volume.value = -11;
+
+          this.bladeMetal = new Tone.MetalSynth({
+            frequency: 960,
+            envelope: { attack: 0.002, decay: 0.08, release: 0.05 },
+            harmonicity: 5.1,
+            modulationIndex: 16,
+            resonance: 4000,
+            octaves: 1.1
+          }).connect(this.reverb);
+          this.bladeMetal.volume.value = -20;
+
+          this.curtainFilter = new Tone.Filter({ frequency: 620, type: 'lowpass', Q: 1.1 }).connect(this.reverb);
+          this.curtainNoise = new Tone.NoiseSynth({
+            noise: { type: 'pink' },
+            envelope: { attack: 0.18, decay: 0.68, sustain: 0 }
+          }).connect(this.curtainFilter);
+          this.curtainNoise.volume.value = -13;
+
+          this.airFilter = new Tone.Filter({ frequency: 420, type: 'bandpass', Q: 2.4 }).connect(this.reverb);
+          this.airNoise = new Tone.NoiseSynth({
+            noise: { type: 'pink' },
+            envelope: { attack: 0.06, decay: 0.55, sustain: 0.14, release: 0.25 }
+          }).connect(this.airFilter);
+          this.airNoise.volume.value = -9;
+
+          this.tensionSynth = new Tone.Synth({
+            oscillator: { type: 'sawtooth' },
+            envelope: { attack: 0.15, decay: 0.4, sustain: 0.6, release: 0.2 }
+          }).connect(new Tone.Filter(480, 'lowpass').connect(this.reverb));
+          this.tensionSynth.volume.value = -17;
+
+          this.impactSynth = new Tone.MembraneSynth({
+            pitchDecay: 0.06,
+            octaves: 4,
+            oscillator: { type: 'sine' },
+            envelope: { attack: 0.002, decay: 0.28, sustain: 0, release: 0.2 }
+          }).connect(this.reverb);
+          this.impactSynth.volume.value = -9;
+
+          this.glassCrackFilter = new Tone.Filter({ frequency: 3400, type: 'highpass', Q: 1.4 }).connect(this.reverb);
+          this.glassCrackNoise = new Tone.NoiseSynth({
+            noise: { type: 'white' },
+            envelope: { attack: 0.001, decay: 0.24, sustain: 0 }
+          }).connect(this.glassCrackFilter);
+          this.glassCrackNoise.volume.value = -6;
+
+          this.glassShardSynth = new Tone.PolySynth(Tone.Synth, {
+            oscillator: { type: 'sine' },
+            envelope: { attack: 0.001, decay: 0.14, sustain: 0, release: 0.24 }
+          }).connect(this.reverb);
+          this.glassShardSynth.volume.value = -11;
+
+          this.tickSynth = new Tone.Synth({
+            oscillator: { type: 'sine' },
+            envelope: { attack: 0.004, decay: 0.07, sustain: 0, release: 0.1 }
+          }).toDestination();
+          this.tickSynth.volume.value = -23;
+
+          this.ready = true;
+        } catch (err) {
+          console.warn('AtelierAudio init skipped:', err);
+        }
+      },
+
+      async unlock() {
+        if (!this.enabled || typeof Tone === 'undefined') return false;
+        try {
+          if (!this.ready) this.init();
+          if (Tone.context.state !== 'running') {
+            await Tone.start();
+          }
+          return Tone.context.state === 'running';
+        } catch (err) {
+          return false;
+        }
+      },
+
+      canPlay() {
+        return this.enabled && this.ready && typeof Tone !== 'undefined' && Tone.context.state === 'running';
+      },
+
+      playIntroAct1() {
+        if (!this.canPlay()) return;
+        try {
+          const now = Tone.now();
+          this.padSynth.triggerAttackRelease(['D4', 'F#4', 'A4', 'E5'], 2.4, now, 0.55);
+          this.dropSynth.triggerAttackRelease('C6', 0.4, now + 0.08, 0.4);
+          this.dropSynth.frequency.exponentialRampToValueAtTime(Tone.Frequency('F#5').toFrequency(), now + 0.52);
+          this.harpSynth.triggerAttackRelease(['A5', 'D6'], '8n', now + 0.56, 0.78);
+          this.harpSynth.triggerAttackRelease(['F#5', 'A5'], '8n', now + 0.72, 0.6);
+          this.harpSynth.triggerAttackRelease(['B5', 'E6'], '8n', now + 0.88, 0.5);
+        } catch (e) {}
+      },
+
+      playIntroAct2() {
+        if (!this.canPlay()) return;
+        try {
+          const now = Tone.now();
+          const archNotes = ['D4', 'F#4', 'A4', 'C#5', 'D5', 'F#5', 'A5', 'D6'];
+          archNotes.forEach((n, idx) => {
+            this.harpSynth.triggerAttackRelease(n, '8n', now + idx * 0.12, 0.55);
+          });
+          this.airFilter.frequency.setValueAtTime(1400, now);
+          this.airFilter.frequency.exponentialRampToValueAtTime(3600, now + 0.8);
+          this.airNoise.triggerAttackRelease(0.7, now, 0.22);
+        } catch (e) {}
+      },
+
+      playIntroScissorCut() {
+        if (!this.canPlay()) return;
+        try {
+          const now = Tone.now();
+          this.airFilter.frequency.setValueAtTime(900, now);
+          this.airFilter.frequency.exponentialRampToValueAtTime(4000, now + 0.2);
+          this.airNoise.triggerAttackRelease(0.2, now, 0.42);
+
+          const snipTimes = [0.06, 0.21, 0.36, 0.51, 0.66];
+          const sparkNotes = ['E6', 'F#6', 'A6', 'B6', 'D7'];
+          snipTimes.forEach((offset, idx) => {
+            this.snipFilter.frequency.setValueAtTime(3800 + idx * 320, now + offset);
+            this.snipNoise.triggerAttackRelease('32n', now + offset, 0.9);
+            this.bladeMetal.triggerAttackRelease('32n', now + offset, 0.55);
+            this.harpSynth.triggerAttackRelease(sparkNotes[idx], '32n', now + offset + 0.02, 0.42);
+          });
+        } catch (e) {}
+      },
+
+      playHeaderReveal() {
+        if (!this.canPlay()) return;
+        try {
+          const now = Tone.now();
+          this.curtainFilter.frequency.setValueAtTime(300, now);
+          this.curtainFilter.frequency.exponentialRampToValueAtTime(1550, now + 0.3);
+          this.curtainFilter.frequency.exponentialRampToValueAtTime(240, now + 0.8);
+          this.curtainNoise.triggerAttackRelease('2n', now, 0.8);
+          this.chimeSynth.triggerAttackRelease(['A4', 'E5'], '2n', now + 0.15, 0.72);
+          this.chimeSynth.triggerAttackRelease(['D4', 'F#4', 'A4', 'E5'], '1n', now + 0.36, 0.65);
+        } catch (e) {}
+      },
+
+      playHeroForcedAirCompress() {
+        if (!this.canPlay()) return;
+        try {
+          const now = Tone.now();
+          this.airFilter.frequency.setValueAtTime(220, now);
+          this.airFilter.frequency.exponentialRampToValueAtTime(2100, now + 0.64);
+          this.airNoise.triggerAttackRelease(0.64, now, 0.92);
+          this.tensionSynth.triggerAttackRelease('F#2', 0.6, now, 0.78);
+          this.tensionSynth.frequency.exponentialRampToValueAtTime(Tone.Frequency('D3').toFrequency(), now + 0.6);
+        } catch (e) {}
+      },
+
+      playHeroAirReleaseJumble() {
+        if (!this.canPlay()) return;
+        try {
+          const now = Tone.now();
+          this.airFilter.frequency.setValueAtTime(3200, now);
+          this.airFilter.frequency.exponentialRampToValueAtTime(420, now + 0.46);
+          this.airNoise.triggerAttackRelease(0.45, now, 0.96);
+          [0.05, 0.16, 0.28, 0.42].forEach((offset, idx) => {
+            this.bladeMetal.triggerAttackRelease('64n', now + offset, 0.32 - idx * 0.05);
+          });
+        } catch (e) {}
+      },
+
+      playHeroConvergeSuction() {
+        if (!this.canPlay()) return;
+        try {
+          const now = Tone.now();
+          this.airFilter.frequency.setValueAtTime(260, now);
+          this.airFilter.frequency.exponentialRampToValueAtTime(3800, now + 0.48);
+          this.airNoise.triggerAttackRelease(0.48, now, 0.98);
+          this.tensionSynth.triggerAttackRelease('A2', 0.46, now, 0.85);
+          this.tensionSynth.frequency.exponentialRampToValueAtTime(Tone.Frequency('A3').toFrequency(), now + 0.46);
+        } catch (e) {}
+      },
+
+      playHeroGlassShatter() {
+        if (!this.canPlay()) return;
+        try {
+          const now = Tone.now();
+          this.impactSynth.triggerAttackRelease('G1', '8n', now, 0.92);
+          this.glassCrackFilter.frequency.setValueAtTime(4200, now);
+          this.glassCrackFilter.frequency.exponentialRampToValueAtTime(1800, now + 0.26);
+          this.glassCrackNoise.triggerAttackRelease(0.24, now, 0.98);
+          this.bladeMetal.triggerAttackRelease('16n', now, 0.82);
+          this.glassCrackNoise.triggerAttackRelease(0.14, now + 0.05, 0.7);
+
+          const shardFreqs = [
+            2450, 3120, 3890, 4420, 5180, 2960, 4760, 5840, 3420,
+            6250, 2740, 4180, 5420, 3680, 4920, 6680, 3240, 4560
+          ];
+          shardFreqs.forEach((freq, i) => {
+            const delay = 0.02 + Math.pow(i / shardFreqs.length, 1.3) * 0.95 + Math.random() * 0.03;
+            const velocity = Math.max(0.16, 0.76 - (i / shardFreqs.length) * 0.55);
+            this.glassShardSynth.triggerAttackRelease(freq, '64n', now + delay, velocity);
+          });
+        } catch (e) {}
+      },
+
+      playHeaderHover() {
+        if (!this.canPlay()) return;
+        try {
+          this.tickSynth.triggerAttackRelease('A5', '64n');
+        } catch (e) {}
+      },
+
+      playHeaderClick() {
+        if (!this.canPlay()) return;
+        try {
+          this.harpSynth.triggerAttackRelease('E5', '16n', undefined, 0.4);
+        } catch (e) {}
+      }
+    };
+
+    function bindHeaderAudioInteractions() {
+      const header = document.getElementById('site-header');
+      if (!header) return;
+      header.querySelectorAll('a, button').forEach(el => {
+        el.addEventListener('mouseenter', () => AtelierAudio.playHeaderHover());
+        el.addEventListener('click', () => {
+          AtelierAudio.unlock().then(() => AtelierAudio.playHeaderClick());
+        });
+      });
+    }
+
+    // Unlock Web Audio cleanly on first user interaction anywhere on the page
+    function setupAutoAudioUnlock() {
+      AtelierAudio.init();
+      AtelierAudio.unlock();
+      const unlockOnce = async () => {
+        const ok = await AtelierAudio.unlock();
+        if (ok) {
+          window.removeEventListener('pointerdown', unlockOnce);
+          window.removeEventListener('keydown', unlockOnce);
+        }
+      };
+      window.addEventListener('pointerdown', unlockOnce, { passive: true });
+      window.addEventListener('keydown', unlockOnce, { passive: true });
+    }
+
+    /* ========================================================================
+       2. 3-ACT SALON MOTION GRAPHICS INTRO
+       ======================================================================== */
+    let introRAF = null;
+    let introTimers = [];
+    let introFinished = false;
+
+    function startSalonIntro() {
+      const introEl = document.getElementById('salon-intro');
+      const canvas = document.getElementById('intro-canvas');
+      const actLabel = document.getElementById('intro-act-label');
+      if (!introEl || !canvas) {
+        finishIntroToHero();
+        return;
+      }
+
+      introFinished = false;
+      AtelierAudio.currentIntroAct = 1;
+      introTimers.forEach(clearTimeout);
+      introTimers = [];
+      introEl.classList.remove('is-hidden', 'act-2', 'act-cut', 'curtain-open');
+      document.body.classList.remove('header-ready', 'hero-unveiled');
+      AtelierAudio.unlock().then((ok) => {
+        if (ok && !introFinished) AtelierAudio.playIntroAct1();
+      });
+
+      const ctx = canvas.getContext('2d');
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const resize = () => {
+        canvas.width = window.innerWidth * dpr;
+        canvas.height = window.innerHeight * dpr;
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      };
+      resize();
+
+      const startTime = performance.now();
+      let cutStartTime = null;
+      const sparks = [];
+
+      function drawIntroFrame(now) {
+        if (introFinished) return;
+        const elapsed = Math.max(0, (now - startTime) / 1000);
+        const w = window.innerWidth;
+        const h = window.innerHeight;
+        ctx.clearRect(0, 0, w, h);
+
+        // Act I: Falling golden elixir droplet + harmonic concentric ripples
+        const cx = w / 2;
+        const cy = h / 2;
+        if (elapsed < 0.56) {
+          const t = elapsed / 0.56;
+          const dropY = -20 + (cy + 20) * (t * t);
+          ctx.beginPath();
+          ctx.arc(cx, dropY, 4.5, 0, Math.PI * 2);
+          ctx.fillStyle = '#F6E0B5';
+          ctx.fill();
+        } else {
+          const rt = elapsed - 0.56;
+          for (let i = 0; i < 3; i++) {
+            const delay = i * 0.16;
+            if (rt > delay && rt < delay + 1.5) {
+              const p = (rt - delay) / 1.5;
+              ctx.beginPath();
+              ctx.arc(cx, cy, 12 + p * Math.min(w, h) * 0.42, 0, Math.PI * 2);
+              ctx.strokeStyle = `rgba(212, 180, 131, ${(1 - p) * 0.45})`;
+              ctx.lineWidth = 1.25;
+              ctx.stroke();
+            }
+          }
+        }
+
+        // Flowing golden silk ribbons
+        for (let r = 0; r < 3; r++) {
+          ctx.beginPath();
+          for (let x = 0; x <= w; x += 28) {
+            const y = cy + Math.sin(x * 0.0045 + elapsed * 1.4 + r * 1.1) * (36 + r * 18);
+            if (x === 0) ctx.moveTo(x, y);
+            else ctx.lineTo(x, y);
+          }
+          ctx.strokeStyle = `rgba(212, 180, 131, ${0.12 + r * 0.04})`;
+          ctx.lineWidth = 1;
+          ctx.stroke();
+        }
+
+        // Act III: Live champagne sparks flying off the slicing brass shears
+        if (cutStartTime !== null) {
+          const cutElapsed = Math.max(0, (now - cutStartTime) / 1000);
+          if (cutElapsed < 0.88) {
+            const bladeX = (cutElapsed / 0.88) * w;
+            for (let s = 0; s < 3; s++) {
+              sparks.push({
+                x: bladeX,
+                y: cy + (Math.random() - 0.5) * 6,
+                vx: (Math.random() - 0.7) * 4.5,
+                vy: (Math.random() - 0.5) * 5.2,
+                life: 1,
+                r: 1.2 + Math.random() * 2.2
+              });
+            }
+          }
+        }
+
+        for (let i = sparks.length - 1; i >= 0; i--) {
+          const sp = sparks[i];
+          sp.x += sp.vx;
+          sp.y += sp.vy;
+          sp.vy += 0.08;
+          sp.life -= 0.032;
+          if (sp.life <= 0) {
+            sparks.splice(i, 1);
+            continue;
+          }
+          ctx.beginPath();
+          ctx.arc(sp.x, sp.y, sp.r, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(246, 224, 181, ${sp.life})`;
+          ctx.fill();
+        }
+
+        introRAF = requestAnimationFrame(drawIntroFrame);
+      }
+      if (introRAF) cancelAnimationFrame(introRAF);
+      introRAF = requestAnimationFrame(drawIntroFrame);
+
+      // Act II: Mirror Arch Line Art
+      introTimers.push(setTimeout(() => {
+        AtelierAudio.currentIntroAct = 2;
+        introEl.classList.add('act-2');
+        if (actLabel) actLabel.textContent = 'Act II • The Mirror Arch';
+        AtelierAudio.playIntroAct2();
+      }, 950));
+
+      // Act III: Scissor Slices Across the Golden Seam
+      introTimers.push(setTimeout(() => {
+        AtelierAudio.currentIntroAct = 3;
+        cutStartTime = performance.now();
+        introEl.classList.add('act-cut');
+        if (actLabel) actLabel.textContent = 'Act III • The Precision Cut';
+        AtelierAudio.playIntroScissorCut();
+      }, 2150));
+
+      // Curtains Part Open to Reveal the Website & Slide Down Header
+      introTimers.push(setTimeout(() => {
+        AtelierAudio.currentIntroAct = 4;
+        introEl.classList.add('curtain-open');
+        document.body.classList.add('header-ready');
+        AtelierAudio.playHeaderReveal();
+      }, 2800));
+
+      introTimers.push(setTimeout(() => {
+        AtelierAudio.currentIntroAct = 0;
+        finishIntroToHero();
+      }, 3550));
+    }
+
+    function finishIntroToHero() {
+      if (introFinished) return;
+      introFinished = true;
+      introTimers.forEach(clearTimeout);
+      introTimers = [];
+      if (introRAF) cancelAnimationFrame(introRAF);
+      const introEl = document.getElementById('salon-intro');
+      if (introEl) introEl.classList.add('is-hidden');
+      document.body.classList.add('header-ready');
+      playHeroBombardReveal();
+    }
+
+    function skipSalonIntro() {
+      AtelierAudio.unlock().then(() => AtelierAudio.playHeaderReveal());
+      finishIntroToHero();
+    }
+
+    function replaySalonIntro() {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      startSalonIntro();
+    }
+
+    /* ========================================================================
+       3. HERO FOCUS -> COMPRESS -> JUMBLE -> CONVERGE -> GLASS SHATTER REVEAL
+       ======================================================================== */
+    let heroBombardRAF = null;
+
+    function playHeroBombardReveal() {
+      const overlay = document.getElementById('hero-bombard-overlay');
+      const canvas = document.getElementById('hero-bombard-canvas');
+      const toolsLayer = document.getElementById('hero-bombard-tools');
+      if (!overlay || !canvas || !toolsLayer) {
+        document.body.classList.add('hero-unveiled');
+        showMarcoGuide(true);
+        return;
+      }
+
+      if (heroBombardRAF) cancelAnimationFrame(heroBombardRAF);
+      document.body.classList.remove('hero-unveiled');
+      overlay.classList.add('is-active');
+      toolsLayer.innerHTML = '';
+
+      const rect = overlay.getBoundingClientRect();
+      const w = Math.max(320, rect.width || window.innerWidth);
+      const h = Math.max(460, rect.height || window.innerHeight * 0.85);
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      canvas.width = w * dpr;
+      canvas.height = h * dpr;
+      const ctx = canvas.getContext('2d');
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+      const cx = w / 2;
+      const cy = h / 2;
+
+      // Warm sunlit twinkles
+      const twinkles = Array.from({ length: 54 }, () => ({
+        x: Math.random() * w,
+        y: Math.random() * h,
+        r: 1.2 + Math.random() * 2.6,
+        phase: Math.random() * Math.PI * 2,
+        color: ['#D9A657', '#C87456', '#6F8B74', '#FFFDF8'][Math.floor(Math.random() * 4)]
+      }));
+
+      // Jumbled screen-wide coordinates for the 10 barber tools
+      const toolBodies = BARBER_TOOLS_SVGS.map((svg, idx) => {
+        const el = document.createElement('div');
+        el.className = 'bombard-tool-node';
+        el.innerHTML = svg;
+        el.style.opacity = '0';
+        toolsLayer.appendChild(el);
+
+        const col = idx % 5;
+        const row = Math.floor(idx / 5);
+        const spreadX = (col - 2) * (w * 0.16) + (Math.random() - 0.5) * 70;
+        const spreadY = (row === 0 ? -1 : 1) * (h * 0.24) + (Math.random() - 0.5) * 65;
+
+        return {
+          el,
+          jx: spreadX,
+          jy: spreadY,
+          jRot: (Math.random() - 0.5) * 56,
+          bobPhase: Math.random() * Math.PI * 2,
+          fallVx: (Math.random() - 0.5) * 520,
+          fallVy: -180 - Math.random() * 260,
+          fallSpin: (Math.random() - 0.5) * 480
+        };
+      });
+
+      // Spiderweb glass shards generated for the shatter phase
+      const shards = Array.from({ length: 56 }, () => {
+        const ang = Math.random() * Math.PI * 2;
+        const dist = 16 + Math.random() * Math.min(w, h) * 0.45;
+        const sx = cx + Math.cos(ang) * dist;
+        const sy = cy + Math.sin(ang) * dist;
+        const size = 18 + Math.random() * 34;
+        return {
+          x: sx,
+          y: sy,
+          vx: Math.cos(ang) * (140 + Math.random() * 340),
+          vy: Math.sin(ang) * (120 + Math.random() * 240) - 140,
+          rot: Math.random() * Math.PI * 2,
+          vRot: (Math.random() - 0.5) * 7,
+          pts: [
+            [0, -size * 0.6],
+            [size * 0.55, size * 0.25],
+            [-size * 0.45, size * 0.45]
+          ],
+          tint: Math.random() > 0.4 ? 'rgba(252, 248, 240, 0.85)' : 'rgba(232, 206, 162, 0.72)'
+        };
+      });
+
+      const start = performance.now();
+      const totalDur = 3.55;
+      let heroRevealed = false;
+      let sfxCompressPlayed = false;
+      let sfxReleasePlayed = false;
+      let sfxConvergePlayed = false;
+      let sfxShatterPlayed = false;
+
+      function tick(now) {
+        const t = Math.max(0, (now - start) / 1000);
+        ctx.clearRect(0, 0, w, h);
+
+        // Warm sunlit travertine backdrop until glass shatter at t = 2.15s
+        const glassAlpha = t < 2.15 ? 1 : Math.max(0, 1 - (t - 2.15) / 0.35);
+        if (glassAlpha > 0) {
+          const bgGrad = ctx.createRadialGradient(cx, cy, 20, cx, cy, Math.max(w, h) * 0.72);
+          bgGrad.addColorStop(0, `rgba(254, 250, 242, ${0.98 * glassAlpha})`);
+          bgGrad.addColorStop(0.65, `rgba(241, 232, 217, ${0.96 * glassAlpha})`);
+          bgGrad.addColorStop(1, `rgba(225, 210, 187, ${0.94 * glassAlpha})`);
+          ctx.fillStyle = bgGrad;
+          ctx.fillRect(0, 0, w, h);
+
+          // Twinkles
+          twinkles.forEach(tw => {
+            const pulse = 0.35 + 0.65 * Math.abs(Math.sin(t * 3 + tw.phase));
+            ctx.beginPath();
+            ctx.arc(tw.x, tw.y, tw.r * pulse, 0, Math.PI * 2);
+            ctx.fillStyle = tw.color;
+            ctx.globalAlpha = pulse * glassAlpha * 0.85;
+            ctx.fill();
+          });
+          ctx.globalAlpha = 1;
+        }
+
+        // Phase 1: Focus & Compress (0.0s - 0.68s) — Forced-Air Inward Compression SFX
+        if (t < 0.68) {
+          if (!sfxCompressPlayed) {
+            sfxCompressPlayed = true;
+            AtelierAudio.playHeroForcedAirCompress();
+          }
+          const p = t / 0.68;
+          const rOuter = 135 * (1 - p * 0.86);
+          ctx.beginPath();
+          ctx.arc(cx, cy, Math.max(8, rOuter), 0, Math.PI * 2);
+          ctx.strokeStyle = '#9A6E2D';
+          ctx.lineWidth = 2;
+          ctx.stroke();
+
+          ctx.beginPath();
+          ctx.arc(cx, cy, 12 + (1 - p) * 20, 0, Math.PI * 2);
+          ctx.fillStyle = 'rgba(200, 116, 86, 0.25)';
+          ctx.fill();
+        }
+        // Phase 2: Jumble Outward (0.68s - 1.65s) — Pneumatic Air Release SFX
+        else if (t < 1.65) {
+          if (!sfxReleasePlayed) {
+            sfxReleasePlayed = true;
+            AtelierAudio.playHeroAirReleaseJumble();
+          }
+          const p = Math.min(1, (t - 0.68) / 0.55);
+          const ease = 1 - Math.pow(1 - p, 3);
+          toolBodies.forEach(tb => {
+            const bob = Math.sin(t * 7 + tb.bobPhase) * 8;
+            const tx = tb.jx * ease;
+            const ty = tb.jy * ease + bob;
+            tb.el.style.opacity = String(Math.min(1, p * 2));
+            tb.el.style.transform = `translate3d(${tx}px, ${ty}px, 0) rotate(${tb.jRot * ease}deg) scale(${0.4 + 0.6 * ease})`;
+          });
+        }
+        // Phase 3: Forceful Convergence back to Center (1.65s - 2.15s) — Suction Riser SFX
+        else if (t < 2.15) {
+          if (!sfxConvergePlayed) {
+            sfxConvergePlayed = true;
+            AtelierAudio.playHeroConvergeSuction();
+          }
+          const p = (t - 1.65) / 0.5;
+          const easeIn = p * p * p;
+          toolBodies.forEach(tb => {
+            const tx = tb.jx * (1 - easeIn);
+            const ty = tb.jy * (1 - easeIn);
+            tb.el.style.opacity = '1';
+            tb.el.style.transform = `translate3d(${tx}px, ${ty}px, 0) rotate(${tb.jRot * (1 - easeIn)}deg) scale(${1 - easeIn * 0.25})`;
+
+            // Kinetic terracotta convergence streaks
+            ctx.beginPath();
+            ctx.moveTo(cx + tx, cy + ty);
+            ctx.lineTo(cx, cy);
+            ctx.strokeStyle = `rgba(184, 92, 56, ${0.32 * p})`;
+            ctx.lineWidth = 1.5;
+            ctx.stroke();
+          });
+        }
+        // Phase 4: Impact Spiderweb Crack & Gravity Glass Shatter (2.15s - 3.55s) — Glass Break SFX
+        else {
+          if (!sfxShatterPlayed) {
+            sfxShatterPlayed = true;
+            AtelierAudio.playHeroGlassShatter();
+          }
+          if (!heroRevealed) {
+            heroRevealed = true;
+            document.body.classList.add('hero-unveiled');
+          }
+          const st = t - 2.15;
+
+          // Brief spiderweb crack flash
+          if (st < 0.22) {
+            const flashAlpha = 1 - st / 0.22;
+            ctx.strokeStyle = `rgba(140, 98, 38, ${flashAlpha * 0.9})`;
+            ctx.lineWidth = 1.6;
+            for (let k = 0; k < 12; k++) {
+              const a = (k / 12) * Math.PI * 2;
+              ctx.beginPath();
+              ctx.moveTo(cx, cy);
+              ctx.lineTo(cx + Math.cos(a) * Math.max(w, h) * 0.65, cy + Math.sin(a) * Math.max(w, h) * 0.65);
+              ctx.stroke();
+            }
+          }
+
+          // Falling glass shards
+          const shardFade = Math.max(0, 1 - st / 1.35);
+          shards.forEach(sh => {
+            const x = sh.x + sh.vx * st;
+            const y = sh.y + sh.vy * st + 0.5 * 980 * st * st;
+            const rot = sh.rot + sh.vRot * st;
+            ctx.save();
+            ctx.translate(x, y);
+            ctx.rotate(rot);
+            ctx.globalAlpha = shardFade;
+            ctx.beginPath();
+            ctx.moveTo(sh.pts[0][0], sh.pts[0][1]);
+            ctx.lineTo(sh.pts[1][0], sh.pts[1][1]);
+            ctx.lineTo(sh.pts[2][0], sh.pts[2][1]);
+            ctx.closePath();
+            ctx.fillStyle = sh.tint;
+            ctx.fill();
+            ctx.strokeStyle = 'rgba(182, 139, 76, 0.7)';
+            ctx.lineWidth = 1;
+            ctx.stroke();
+            ctx.restore();
+          });
+
+          // Tools tumbling down under gravity
+          toolBodies.forEach(tb => {
+            const tx = tb.fallVx * st;
+            const ty = tb.fallVy * st + 0.5 * 1050 * st * st;
+            const rot = tb.fallSpin * st;
+            tb.el.style.opacity = String(shardFade);
+            tb.el.style.transform = `translate3d(${tx}px, ${ty}px, 0) rotate(${rot}deg) scale(${0.85 * shardFade + 0.15})`;
+          });
+        }
+
+        if (t < totalDur) {
+          heroBombardRAF = requestAnimationFrame(tick);
+        } else {
+          overlay.classList.remove('is-active');
+          toolsLayer.innerHTML = '';
+          ctx.clearRect(0, 0, w, h);
+          document.body.classList.add('hero-unveiled');
+          showMarcoGuide(true);
+        }
+      }
+      heroBombardRAF = requestAnimationFrame(tick);
+    }
+
+    /* ========================================================================
+       4. PERSISTENT SCRATCH-CARD BRUSH PHOTO REVEAL & SCROLL CHOREOGRAPHY
+       ======================================================================== */
+    function initBrushScratchElement(wrap) {
+      if (!wrap || wrap.dataset.brushInit === '1') return;
+      wrap.dataset.brushInit = '1';
+
+      const canvas = document.createElement('canvas');
+      canvas.className = 'brush-scratch-canvas';
+      wrap.appendChild(canvas);
+
+      const wand = document.createElement('div');
+      wand.className = 'brush-wand';
+      wand.innerHTML = `<svg viewBox="0 0 92 24" fill="none" class="w-full h-full"><path d="M2 12C6 4 17 3 26 7V17C17 21 6 20 2 12Z" fill="#E8C57E"/><rect x="25" y="7" width="12" height="10" rx="2" fill="#B68B4C"/><path d="M37 8.5L90 10.5V13.5L37 15.5V8.5Z" fill="#1C1917"/></svg>`;
+      wrap.appendChild(wand);
+
+      paintFoilCover(wrap);
+    }
+
+    function paintFoilCover(wrap) {
+      const canvas = wrap.querySelector('.brush-scratch-canvas');
+      if (!canvas) return;
+      const w = wrap.clientWidth || 260;
+      const h = wrap.clientHeight || 320;
+      canvas.width = w;
+      canvas.height = h;
+      canvas.style.opacity = '1';
+      const ctx = canvas.getContext('2d');
+      ctx.globalCompositeOperation = 'source-over';
+
+      const isDark = document.documentElement.classList.contains('theme-nocturne');
+      const grad = ctx.createLinearGradient(0, 0, w, h);
+      if (isDark) {
+        grad.addColorStop(0, '#2A241C');
+        grad.addColorStop(0.5, '#3E3324');
+        grad.addColorStop(1, '#241E17');
+      } else {
+        grad.addColorStop(0, '#E8DEC9');
+        grad.addColorStop(0.5, '#D7C19A');
+        grad.addColorStop(1, '#E9DFCB');
+      }
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, w, h);
+
+      ctx.fillStyle = isDark ? 'rgba(232,197,126,0.22)' : 'rgba(140,98,38,0.22)';
+      ctx.font = 'italic 34px "Cormorant Garamond", Georgia, serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('BA', w / 2, h / 2 + 12);
+    }
+
+    function triggerBrushReveal(wrap) {
+      if (!wrap) return;
+      initBrushScratchElement(wrap);
+      paintFoilCover(wrap);
+
+      const canvas = wrap.querySelector('.brush-scratch-canvas');
+      const wand = wrap.querySelector('.brush-wand');
+      if (!canvas || !wand) return;
+
+      if (wrap._brushRAF) cancelAnimationFrame(wrap._brushRAF);
+      const ctx = canvas.getContext('2d');
+      const w = canvas.width;
+      const h = canvas.height;
+
+      // Zig-zag diagonal scratch waypoints
+      const points = [
+        { x: w * 0.1, y: h * 0.12 },
+        { x: w * 0.9, y: h * 0.24 },
+        { x: w * 0.08, y: h * 0.42 },
+        { x: w * 0.92, y: h * 0.58 },
+        { x: w * 0.1, y: h * 0.78 },
+        { x: w * 0.92, y: h * 0.9 }
+      ];
+
+      wand.style.opacity = '1';
+      const start = performance.now();
+      const dur = 860;
+      const segCount = points.length - 1;
+
+      function step(now) {
+        const elapsed = Math.max(0, now - start);
+        const progress = Math.min(1, elapsed / dur);
+        const scaled = progress * segCount;
+        const segIdx = Math.max(0, Math.min(segCount - 1, Math.floor(scaled)));
+        const localT = scaled - segIdx;
+        const p0 = points[segIdx];
+        const p1 = points[segIdx + 1];
+        if (!p0 || !p1) return;
+
+        const x = p0.x + (p1.x - p0.x) * localT;
+        const y = p0.y + (p1.y - p0.y) * localT;
+
+        ctx.globalCompositeOperation = 'destination-out';
+        const brushRadius = Math.max(36, Math.min(w, h) * 0.2);
+        const rg = ctx.createRadialGradient(x, y, brushRadius * 0.25, x, y, brushRadius);
+        rg.addColorStop(0, 'rgba(0,0,0,1)');
+        rg.addColorStop(1, 'rgba(0,0,0,0)');
+        ctx.fillStyle = rg;
+        ctx.beginPath();
+        ctx.arc(x, y, brushRadius, 0, Math.PI * 2);
+        ctx.fill();
+
+        const angle = Math.atan2(p1.y - p0.y, p1.x - p0.x) * (180 / Math.PI) * 0.25;
+        wand.style.transform = `translate3d(${x - 10}px, ${y - 12}px, 0) rotate(${angle}deg)`;
+
+        if (progress < 1) {
+          wrap._brushRAF = requestAnimationFrame(step);
+        } else {
+          canvas.style.opacity = '0';
+          wand.style.opacity = '0';
+        }
+      }
+
+      wrap._brushRAF = requestAnimationFrame(step);
+    }
+
+    function createPersistentObserver(selector, onEnter, onLeave, threshold = 0.01) {
+      const els = document.querySelectorAll(selector);
+      if (!els.length || typeof IntersectionObserver === 'undefined') return;
+      const obs = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            onEnter(entry.target);
+          } else {
+            onLeave(entry.target);
+          }
+        });
+      }, { threshold, rootMargin: '0px 0px -40px 0px' });
+      els.forEach(el => obs.observe(el));
+    }
+
+    function initPersistentScrollAnimations() {
+      // Brush scratch reveals
+      document.querySelectorAll('.brush-reveal-wrap').forEach(initBrushScratchElement);
+      createPersistentObserver(
+        '.brush-reveal-wrap',
+        (el) => triggerBrushReveal(el),
+        (el) => paintFoilCover(el),
+        0.08
+      );
+
+      // Scissor-cut section reveals (low threshold so tall menu sections always unveil!)
+      createPersistentObserver(
+        '.scissor-cut-stage',
+        (el) => {
+          el.classList.remove('is-cutting', 'is-cut');
+          void el.offsetWidth;
+          el.classList.add('is-cutting');
+          setTimeout(() => el.classList.add('is-cut'), 280);
+        },
+        (el) => {
+          el.classList.remove('is-cutting', 'is-cut');
+        },
+        0.01
+      );
+
+      // Caliper framing
+      createPersistentObserver(
+        '.caliper-frame',
+        (el) => el.classList.add('is-framed'),
+        (el) => el.classList.remove('is-framed'),
+        0.1
+      );
+
+      // Botanical serum drop
+      createPersistentObserver(
+        '.serum-drop-stage',
+        (el) => {
+          el.classList.remove('is-dropping');
+          void el.offsetWidth;
+          el.classList.add('is-dropping');
+        },
+        (el) => el.classList.remove('is-dropping'),
+        0.1
+      );
+
+      // Editorial heading shimmer
+      createPersistentObserver(
+        '.shimmer-heading',
+        (el) => {
+          el.classList.remove('is-shimmering');
+          void el.offsetWidth;
+          el.classList.add('is-shimmering');
+        },
+        (el) => el.classList.remove('is-shimmering'),
+        0.1
+      );
+
+      // Header scrolled shadow + champagne-gold scroll progress bar
+      const header = document.getElementById('site-header');
+      const progressBar = document.getElementById('scroll-progress-bar');
+      window.addEventListener('scroll', () => {
+        const y = window.scrollY;
+        if (header) header.classList.toggle('is-scrolled', y > 24);
+        if (progressBar) {
+          const maxScroll = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+          progressBar.style.width = `${Math.min(100, (y / maxScroll) * 100)}%`;
+        }
+      }, { passive: true });
+    }
+
+    /* ========================================================================
+       5. LOOKBOOK GALLERY, DRAG-SCROLL & LIGHTBOX
+       ======================================================================== */
+    function renderLookbook() {
+      const track = document.getElementById('lookbook-track');
+      if (!track) return;
+      track.innerHTML = LOOKBOOK_PLATES.map((plate, idx) => `
+        <article
+          onclick="openLightbox(${idx})"
+          data-cursor="Inspect"
+          class="atelier-card flex-none w-72 sm:w-80 p-3 cursor-pointer group"
+        >
+          <div class="brush-reveal-wrap aspect-[4/5] rounded-xl overflow-hidden bg-surface mb-3.5 relative">
+            <img src="${plate.image}" alt="${plate.title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" referrerpolicy="no-referrer" />
+          </div>
+          <p class="text-[11px] font-semibold uppercase tracking-[0.18em] text-gold px-1">${plate.tag}</p>
+          <h3 class="font-serif text-2xl font-medium text-ink px-1 mt-0.5">${plate.title}</h3>
+        </article>
+      `).join('');
+
+      // Drag-to-scroll on desktop
+      let isDown = false, startX = 0, scrollLeft = 0;
+      track.addEventListener('mousedown', (e) => {
+        isDown = true;
+        startX = e.pageX - track.offsetLeft;
+        scrollLeft = track.scrollLeft;
+      });
+      window.addEventListener('mouseup', () => { isDown = false; });
+      track.addEventListener('mousemove', (e) => {
+        if (!isDown) return;
+        e.preventDefault();
+        const x = e.pageX - track.offsetLeft;
+        track.scrollLeft = scrollLeft - (x - startX) * 1.4;
+      });
+    }
+
+    function scrollLookbook(delta) {
+      const track = document.getElementById('lookbook-track');
+      if (track) track.scrollBy({ left: delta, behavior: 'smooth' });
+    }
+
+    function openLightbox(idx) {
+      const plate = LOOKBOOK_PLATES[idx];
+      const modal = document.getElementById('lookbook-lightbox');
+      if (!plate || !modal) return;
+      document.getElementById('lightbox-img').src = plate.image;
+      document.getElementById('lightbox-tag').textContent = plate.tag;
+      document.getElementById('lightbox-title').textContent = plate.title;
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeLightbox() {
+      const modal = document.getElementById('lookbook-lightbox');
+      if (!modal) return;
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    /* ========================================================================
+       6. TREATMENT MENU LEDGER & FLOATING PREVIEW
+       ======================================================================== */
+    function initCategoryBar() {
+      const container = document.getElementById('category-tabs');
+      if (!container) return;
+      container.innerHTML = SERVICE_CATEGORIES.map(cat => {
+        const active = cat === activeCategory;
+        const count = cat === 'All Services'
+          ? SERVICES.length
+          : SERVICES.filter(s => s.category === cat).length;
+        return `
+          <button
+            type="button"
+            onclick="setServiceCategory('${cat.replace(/'/g, "\\'")}')"
+            class="px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-[0.14em] whitespace-nowrap transition-all cursor-pointer ${
+              active
+                ? 'bg-ink text-canvas shadow-sm'
+                : 'bg-card border border-hairline text-ink hover:border-gold hover:text-gold'
+            }"
+          >
+            ${cat} <span class="opacity-70 ml-1">(${count})</span>
+          </button>
+        `;
+      }).join('');
+    }
+
+    function setServiceCategory(cat) {
+      activeCategory = cat;
+      initCategoryBar();
+      renderServiceLedger();
+    }
+
+    function handleServiceSearch(val) {
+      serviceSearchQuery = (val || '').trim().toLowerCase();
+      renderServiceLedger();
+    }
+
+    function renderServiceLedger() {
+      const ledger = document.getElementById('service-ledger');
+      if (!ledger) return;
+      let list = activeCategory === 'All Services'
+        ? SERVICES
+        : SERVICES.filter(s => s.category === activeCategory);
+
+      if (serviceSearchQuery) {
+        list = list.filter(s =>
+          s.name.toLowerCase().includes(serviceSearchQuery) ||
+          s.category.toLowerCase().includes(serviceSearchQuery) ||
+          s.summary.toLowerCase().includes(serviceSearchQuery)
+        );
+      }
+
+      if (!list.length) {
+        ledger.innerHTML = `
+          <div class="atelier-card p-8 text-center space-y-2">
+            <p class="font-serif text-2xl text-ink">No matching services found</p>
+            <p class="text-sm text-inkMuted">Try clearing your search or switching to <strong>All Services</strong>.</p>
+          </div>
+        `;
+        return;
+      }
+
+      ledger.innerHTML = list.map(s => `
+        <div
+          class="service-row atelier-card p-5 sm:p-6 cursor-pointer"
+          onclick="this.classList.toggle('is-open')"
+          onmouseenter="showFloatPreview('${s.image}', '${s.category}')"
+          onmousemove="moveFloatPreview(event)"
+          onmouseleave="hideFloatPreview()"
+        >
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+            <div>
+              <p class="text-[11px] font-semibold uppercase tracking-[0.18em] text-gold">${s.category}</p>
+              <h3 class="service-row-title font-serif text-2xl sm:text-3xl font-medium text-ink mt-0.5">${s.name}</h3>
+            </div>
+            <div class="flex items-center gap-3 sm:gap-4">
+              <span class="text-xs font-semibold uppercase tracking-wider text-inkMuted bg-surface px-3 py-1 rounded-full">${s.duration}</span>
+              <span class="text-xs font-semibold uppercase tracking-wider text-gold border border-gold/40 bg-goldSoft px-3 py-1 rounded-full">Details +</span>
+            </div>
+          </div>
+
+          <div class="service-drawer">
+            <div class="service-drawer-inner">
+              <div class="pt-5 mt-5 border-t border-hairline grid grid-cols-1 md:grid-cols-12 gap-5 items-center">
+                <div class="md:col-span-8 space-y-2 text-sm text-inkMuted">
+                  <p class="text-ink">${s.summary}</p>
+                  <p><strong class="text-ink">Ideal For:</strong> ${s.idealFor}</p>
+                  <p><strong class="text-ink">Protocol:</strong> ${s.protocol}</p>
+                </div>
+                <div class="md:col-span-4 flex md:justify-end">
+                  <button
+                    type="button"
+                    onclick="event.stopPropagation(); openBookingDrawer('${s.id}')"
+                    class="atelier-btn atelier-btn-gold !py-2.5 !px-5"
+                  >
+                    <span>Book Service</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function showFloatPreview(imgUrl, tag) {
+      if (!isFinePointer) return;
+      const box = document.getElementById('floating-service-preview');
+      if (!box) return;
+      document.getElementById('floating-preview-img').src = imgUrl;
+      document.getElementById('floating-preview-tag').textContent = tag;
+      box.classList.add('is-active');
+    }
+
+    function moveFloatPreview(e) {
+      if (!isFinePointer) return;
+      const box = document.getElementById('floating-service-preview');
+      if (!box) return;
+      box.style.transform = `translate3d(${e.clientX + 24}px, ${e.clientY - 120}px, 0) scale(1)`;
+    }
+
+    function hideFloatPreview() {
+      const box = document.getElementById('floating-service-preview');
+      if (box) box.classList.remove('is-active');
+    }
+
+    /* ========================================================================
+       7. FOUR-STAGE SENSORY CHOREOGRAPHY & ATELIER TOOLS IN MOTION
+       ======================================================================== */
+    function renderSensoryStages() {
+      const listEl = document.getElementById('sensory-stage-list');
+      if (!listEl) return;
+      listEl.innerHTML = SENSORY_STAGES.map((st, idx) => {
+        const active = idx === activeSensoryIdx;
+        return `
+          <button
+            type="button"
+            onclick="setSensoryStage(${idx})"
+            class="w-full text-left p-5 rounded-2xl border transition-all cursor-pointer ${
+              active
+                ? 'bg-card border-gold shadow-lg'
+                : 'bg-card/60 border-hairline hover:border-gold/60'
+            }"
+          >
+            <div class="flex items-center justify-between gap-3">
+              <span class="text-xs font-semibold uppercase tracking-[0.2em] text-gold">Stage ${st.num}</span>
+              <span class="text-xs font-medium text-inkMuted">${st.duration}</span>
+            </div>
+            <h3 class="font-serif text-2xl font-medium text-ink mt-1">${st.title}</h3>
+            <p class="text-sm text-inkMuted mt-1.5 leading-relaxed">${st.summary}</p>
+          </button>
+        `;
+      }).join('');
+    }
+
+    function setSensoryStage(idx) {
+      activeSensoryIdx = idx;
+      const st = SENSORY_STAGES[idx];
+      renderSensoryStages();
+      const img = document.getElementById('sensory-stage-img');
+      const badge = document.getElementById('sensory-stage-badge');
+      const cap = document.getElementById('sensory-stage-caption');
+      const frame = document.getElementById('sensory-brush-frame');
+      if (img) img.src = st.image;
+      if (badge) badge.textContent = `Stage ${st.num} • ${st.title}`;
+      if (cap) cap.textContent = st.caption;
+      if (frame) triggerBrushReveal(frame);
+    }
+
+    function initAtelierToolsShowcase() {
+      const btns = document.getElementById('atelier-tool-buttons');
+      if (!btns) return;
+      btns.innerHTML = ATELIER_TOOLS_MOTION.map((t, idx) => `
+        <button
+          type="button"
+          onclick="selectAtelierTool(${idx})"
+          class="px-4 py-2 rounded-full text-xs font-semibold uppercase tracking-[0.14em] transition-all cursor-pointer ${
+            idx === activeToolMotionIdx
+              ? 'bg-ink text-canvas'
+              : 'bg-surface border border-hairline text-ink hover:border-gold hover:text-gold'
+          }"
+        >
+          ${t.label}
+        </button>
+      `).join('');
+    }
+
+    function selectAtelierTool(idx) {
+      activeToolMotionIdx = idx;
+      const tool = ATELIER_TOOLS_MOTION[idx];
+      const titleEl = document.getElementById('active-tool-title');
+      const descEl = document.getElementById('active-tool-desc');
+      if (titleEl) titleEl.textContent = tool.title;
+      if (descEl) descEl.textContent = tool.desc;
+      initAtelierToolsShowcase();
+    }
+
+    function initToolMotionCanvas() {
+      const canvas = document.getElementById('tool-motion-canvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const resize = () => {
+        canvas.width = canvas.parentElement.clientWidth || 600;
+        canvas.height = canvas.parentElement.clientHeight || 160;
+      };
+      resize();
+      window.addEventListener('resize', resize);
+
+      const particles = Array.from({ length: 24 }, () => ({
+        x: Math.random() * 600,
+        y: Math.random() * 160,
+        vx: 0.35 + Math.random() * 0.6,
+        r: 1.5 + Math.random() * 2.5
+      }));
+
+      function draw(t) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        const sec = t * 0.0012;
+        particles.forEach((p, idx) => {
+          p.x = (p.x + p.vx + activeToolMotionIdx * 0.25) % canvas.width;
+          const y = (p.y + Math.sin(sec + idx) * 18 + canvas.height) % canvas.height;
+          ctx.beginPath();
+          ctx.arc(p.x, y, p.r, 0, Math.PI * 2);
+          ctx.fillStyle = 'rgba(184, 149, 100, 0.28)';
+          ctx.fill();
+        });
+        requestAnimationFrame(draw);
+      }
+      requestAnimationFrame(draw);
+    }
+
+    /* ========================================================================
+       8. CONSULTATION TRIAGE, BOOKING DRAWER & DUAL THEME TOGGLE
+       ======================================================================== */
+    function renderTriage() {
+      const container = document.getElementById('triage-container');
+      const stepLabel = document.getElementById('triage-step-label');
+      if (!container) return;
+
+      if (triageStepIdx >= TRIAGE_STEPS.length) {
+        if (stepLabel) stepLabel.textContent = 'Your Recommended Service';
+        let matchId = 'hydro-facial';
+        if (triageAnswers.goal === 'hair') {
+          matchId = triageAnswers.style === 'refresh' ? 'women-hair-cut' : 'balayage';
+        } else if (triageAnswers.goal === 'facial') {
+          matchId = triageAnswers.occasion === 'event' ? 'bridal-facials' : (triageAnswers.style === 'refresh' ? 'express-facial' : 'hydro-facial');
+        } else if (triageAnswers.goal === 'brows') {
+          matchId = triageAnswers.occasion === 'event' ? 'lash-extensions' : 'eyebrow-threading';
+        } else if (triageAnswers.goal === 'bridal') {
+          matchId = triageAnswers.style === 'refresh' ? 'henna-tattoos' : 'bridal-makeup';
+        }
+        const match = SERVICES.find(s => s.id === matchId) || SERVICES[0];
+
+        container.innerHTML = `
+          <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+            <div class="md:col-span-5">
+              <div class="brush-reveal-wrap aspect-[4/5] rounded-2xl overflow-hidden border border-hairline">
+                <img src="${match.image}" alt="${match.name}" class="w-full h-full object-cover" referrerpolicy="no-referrer" />
+              </div>
+            </div>
+            <div class="md:col-span-7 space-y-4">
+              <span class="eyebrow-pill">${match.category}</span>
+              <h3 class="font-serif text-3xl sm:text-4xl font-medium text-ink">${match.name}</h3>
+              <p class="text-base text-inkMuted leading-relaxed">${match.summary}</p>
+              <div class="flex items-center gap-5 pt-2">
+                <span class="font-serif text-2xl font-semibold text-gold">${match.price}</span>
+                <span class="text-xs font-semibold uppercase tracking-wider text-inkMuted">${match.duration}</span>
+              </div>
+              <div class="pt-3 flex flex-wrap gap-3">
+                <button type="button" onclick="openBookingDrawer('${match.id}')" class="atelier-btn atelier-btn-gold">
+                  <span>Book This Service</span>
+                </button>
+                <button type="button" onclick="resetTriage()" class="atelier-btn">
+                  <span>Start Over</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+        const wrap = container.querySelector('.brush-reveal-wrap');
+        if (wrap) triggerBrushReveal(wrap);
+        return;
+      }
+
+      const step = TRIAGE_STEPS[triageStepIdx];
+      if (stepLabel) stepLabel.textContent = step.label;
+      container.innerHTML = `
+        <h3 class="font-serif text-3xl font-medium text-ink mb-6">${step.question}</h3>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          ${step.options.map(opt => `
+            <button
+              type="button"
+              onclick="selectTriage('${step.key}', '${opt.value}')"
+              class="text-left p-5 rounded-2xl bg-surface/60 border border-hairline hover:border-gold hover:bg-card transition-all cursor-pointer"
+            >
+              <p class="font-serif text-2xl font-medium text-ink">${opt.title}</p>
+              <p class="text-sm text-inkMuted mt-1">${opt.desc}</p>
+            </button>
+          `).join('')}
+        </div>
+      `;
+    }
+
+    function selectTriage(key, value) {
+      triageAnswers[key] = value;
+      triageStepIdx++;
+      renderTriage();
+    }
+
+    function resetTriage() {
+      triageStepIdx = 0;
+      triageAnswers = {};
+      renderTriage();
+    }
+
+    function populateBookingSelect() {
+      const sel = document.getElementById('booking-service-select');
+      if (!sel) return;
+      const groups = SERVICE_CATEGORIES.filter(c => c !== 'All Services');
+      sel.innerHTML = groups.map(cat => {
+        const items = SERVICES.filter(s => s.category === cat);
+        return `<optgroup label="${cat}">${items.map(s => `<option value="${s.id}">${s.name}</option>`).join('')}</optgroup>`;
+      }).join('');
+      const dateInput = document.getElementById('booking-date');
+      if (dateInput) {
+        const tomorrow = new Date(Date.now() + 86400000).toISOString().split('T')[0];
+        dateInput.value = tomorrow;
+      }
+      updateBookingSummary();
+    }
+
+    function updateBookingSummary() {
+      const sel = document.getElementById('booking-service-select');
+      const svc = SERVICES.find(s => s.id === (sel ? sel.value : '')) || SERVICES[0];
+      const dur = document.getElementById('booking-duration');
+      const pr = document.getElementById('booking-price');
+      if (dur) dur.textContent = svc.category;
+      if (pr) pr.textContent = svc.duration;
+    }
+
+    function updateSalonLiveStatus() {
+      const badge = document.getElementById('salon-live-status');
+      if (!badge) return;
+      try {
+        const nowET = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/New_York' }));
+        const day = nowET.getDay(); // 0=Sun, 5=Fri, 6=Sat
+        const mins = nowET.getHours() * 60 + nowET.getMinutes();
+        let openM = 600, closeM = 1140; // Mon-Thu 10:00-19:00
+        if (day === 5 || day === 6) { openM = 600; closeM = 1170; } // Fri-Sat 10:00-19:30
+        if (day === 0) { openM = 660; closeM = 1080; } // Sun 11:00-18:00
+        const isOpen = mins >= openM && mins < closeM;
+        badge.textContent = isOpen ? '● Open Now (ET)' : '● Opens 10 AM (Sun 11 AM)';
+      } catch (e) {}
+    }
+
+    function openBookingDrawer(serviceId) {
+      const overlay = document.getElementById('booking-overlay');
+      const sel = document.getElementById('booking-service-select');
+      resetBookingForm();
+      if (serviceId && sel) {
+        sel.value = serviceId;
+        updateBookingSummary();
+      }
+      if (overlay) {
+        overlay.classList.remove('hidden');
+        overlay.classList.add('flex');
+      }
+      marcoReact('Ooh, booking a VIP suite?! Tell them Marco sent you for extra eucalyptus steam!', 'Booking');
+    }
+
+    function closeBookingDrawer() {
+      const overlay = document.getElementById('booking-overlay');
+      if (!overlay) return;
+      overlay.classList.add('hidden');
+      overlay.classList.remove('flex');
+    }
+
+    function selectSlot(btn, slot) {
+      selectedSlot = slot;
+      document.querySelectorAll('.slot-btn').forEach(b => {
+        b.classList.remove('border-2', 'border-gold', 'bg-goldSoft');
+        b.classList.add('border', 'border-hairline', 'bg-card');
+      });
+      btn.classList.remove('border', 'border-hairline', 'bg-card');
+      btn.classList.add('border-2', 'border-gold', 'bg-goldSoft');
+    }
+
+    function submitBooking(e) {
+      e.preventDefault();
+      const name = document.getElementById('booking-name').value.trim();
+      const date = document.getElementById('booking-date').value;
+      const sel = document.getElementById('booking-service-select');
+      const svc = SERVICES.find(s => s.id === sel.value) || SERVICES[0];
+
+      document.getElementById('booking-form').classList.add('hidden');
+      const conf = document.getElementById('booking-confirmation');
+      conf.classList.remove('hidden');
+      document.getElementById('booking-confirm-details').textContent =
+        `${name}, your request for ${svc.name} (${svc.category}) on ${date} at ${selectedSlot} is ready. Our Alpharetta front desk will confirm shortly—or call (770) 674-1884 for immediate booking.`;
+    }
+
+    function resetBookingForm() {
+      document.getElementById('booking-confirmation').classList.add('hidden');
+      document.getElementById('booking-form').classList.remove('hidden');
+    }
+
+    function toggleAtelierTheme() {
+      const isDark = document.documentElement.classList.toggle('theme-nocturne');
+      const btn = document.getElementById('theme-toggle-btn');
+      if (btn) {
+        btn.innerHTML = isDark ? '<span>☀</span><span>Silk Ivory</span>' : '<span>☾</span><span>Nocturne</span>';
+      }
+      marcoReact(isDark ? 'Nocturne Velvet mode! My Royal Cobalt apron glows even brighter in the dark!' : 'Back to sunlit Silk Ivory—fresh as a Buckhead morning!', 'Theme');
+    }
+
+    /* ========================================================================
+       9. CUSTOM LERPING CURSOR, MAGNETS & GOLDEN SILK-WAVE FOOTER
+       ======================================================================== */
+    function initCustomCursorAndMagnets() {
+      const cursor = document.getElementById('atelier-cursor');
+      const label = document.getElementById('atelier-cursor-label');
+      if (isFinePointer && cursor) {
+        let mx = -100, my = -100, cx = -100, cy = -100;
+        window.addEventListener('mousemove', (e) => {
+          mx = e.clientX;
+          my = e.clientY;
+          cursor.style.opacity = '1';
+          const target = e.target.closest('[data-cursor]');
+          if (label) label.textContent = target ? target.getAttribute('data-cursor') : 'Atelier';
+        });
+        function loopCursor() {
+          cx += (mx - cx) * 0.16;
+          cy += (my - cy) * 0.16;
+          cursor.style.transform = `translate3d(${cx - 29}px, ${cy - 29}px, 0)`;
+          requestAnimationFrame(loopCursor);
+        }
+        requestAnimationFrame(loopCursor);
+      }
+
+      document.querySelectorAll('.magnetic-el').forEach(btn => {
+        btn.addEventListener('mousemove', (e) => {
+          const r = btn.getBoundingClientRect();
+          const dx = (e.clientX - (r.left + r.width / 2)) * 0.14;
+          const dy = (e.clientY - (r.top + r.height / 2)) * 0.14;
+          btn.style.transform = `translate3d(${dx}px, ${dy}px, 0)`;
+        });
+        btn.addEventListener('mouseleave', () => {
+          btn.style.transform = '';
+        });
+      });
+    }
+
+    function initSilkWaveFooter() {
+      const canvas = document.getElementById('silk-wave-canvas');
+      const footer = document.getElementById('vip-footer');
+      if (!canvas || !footer) return;
+      const ctx = canvas.getContext('2d');
+      let mouseY = 0.5;
+      let dust = [];
+
+      const resize = () => {
+        canvas.width = footer.clientWidth || window.innerWidth;
+        canvas.height = footer.clientHeight || 360;
+      };
+      resize();
+      window.addEventListener('resize', resize);
+
+      footer.addEventListener('mousemove', (e) => {
+        const r = footer.getBoundingClientRect();
+        mouseY = (e.clientY - r.top) / Math.max(1, r.height);
+        for (let i = 0; i < 2; i++) {
+          dust.push({
+            x: e.clientX - r.left,
+            y: e.clientY - r.top,
+            vx: (Math.random() - 0.5) * 1.4,
+            vy: -0.4 - Math.random() * 1.2,
+            r: 1.4 + Math.random() * 2.2,
+            life: 1
+          });
+        }
+      });
+
+      footer.addEventListener('click', (e) => {
+        const r = footer.getBoundingClientRect();
+        for (let i = 0; i < 18; i++) {
+          const ang = (i / 18) * Math.PI * 2;
+          dust.push({
+            x: e.clientX - r.left,
+            y: e.clientY - r.top,
+            vx: Math.cos(ang) * (1.8 + Math.random() * 2.4),
+            vy: Math.sin(ang) * (1.8 + Math.random() * 2.4),
+            r: 1.8 + Math.random() * 2.2,
+            life: 1
+          });
+        }
+      });
+
+      function draw(t) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        const w = canvas.width;
+        const h = canvas.height;
+        const sec = t * 0.001;
+
+        for (let i = 0; i < 4; i++) {
+          ctx.beginPath();
+          for (let x = 0; x <= w; x += 26) {
+            const y = h * (0.35 + mouseY * 0.25) + Math.sin(x * 0.005 + sec + i * 0.8) * (24 + i * 12);
+            if (x === 0) ctx.moveTo(x, y);
+            else ctx.lineTo(x, y);
+          }
+          ctx.strokeStyle = `rgba(184, 149, 100, ${0.14 + i * 0.03})`;
+          ctx.lineWidth = 1;
+          ctx.stroke();
+        }
+
+        dust = dust.filter(p => p.life > 0.02);
+        dust.forEach(p => {
+          p.x += p.vx;
+          p.y += p.vy;
+          p.life -= 0.022;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(212, 180, 131, ${p.life * 0.8})`;
+          ctx.fill();
+        });
+        requestAnimationFrame(draw);
+      }
+      requestAnimationFrame(draw);
+    }
+
+    /* ========================================================================
+       10. MARCO — STANDOUT ROYAL COBALT & BARBER-CRIMSON 3D AVATAR GUIDE
+       ======================================================================== */
+    const MARCO_STOPS = [
+      { id: 'hero-section', side: 'right', gesture: 'wave', line: 'Whoa—barely dodged that shattered glass! Welcome to Beauty Ambassadors in Alpharetta on North Main St!' },
+      { id: 'lookbook', side: 'left', gesture: 'reveal', line: 'From Balayage & Keratin to Dermalogica Hydro Facials and Bridal Mehendi—check out our visual gallery!' },
+      { id: 'rituals', side: 'right', gesture: 'snip', line: 'Did you see those brass shears cut the menu open?! All 9 categories & 45+ real services—use the search bar to find your favorite!' },
+      { id: 'process', side: 'left', gesture: 'zen', line: 'Upfront price quotes, warm herbal oil hair spas, and Dermalogica Face Mapping®. Even my pompadour gets relaxed here!' },
+      { id: 'consultation', side: 'right', gesture: 'think', line: 'Not sure whether to book a Hydro Facial, Balayage, or Brow Threading? Take our 3-step quiz!' },
+      { id: 'vip-footer', side: 'left', gesture: 'celebrate', line: 'We’re open 7 days a week at 875 N Main St, Suite #356, Alpharetta! Walk-ins welcome—or call (770) 674-1884!' }
+    ];
+
+    const MARCO_GESTURES = [
+      { id: 'wave', label: 'Wave', quip: 'Hey gorgeous! Welcome to Beauty Ambassadors Salon & Spa in Alpharetta!' },
+      { id: 'snip', label: 'Shear Snip', quip: 'Snip, snip! Women’s layers, men’s fades, kids’ cuts—we do them all!' },
+      { id: 'salute', label: 'Salute', quip: 'Captain Marco reporting for duty at 875 N Main St, Suite #356!' },
+      { id: 'reveal', label: 'Reveal', quip: 'Behold—Balayage, Keratin, Hydro Facials & Bridal Glam under one roof!' },
+      { id: 'think', label: 'Deep Think', quip: 'Hmm... Dermalogica Facial first, or Silk & Shine Hair Spa? Why not both!' },
+      { id: 'bow', label: 'Atelier Bow', quip: 'At your service, Alpharetta royalty! Walk-ins are always welcome!' },
+      { id: 'celebrate', label: 'VIP Cheer', quip: '4.9 stars and 518+ happy Alpharetta reviews—woohoo!' },
+      { id: 'zen', label: 'Zen Ritual', quip: 'Inhale warm herbal hair oil... exhale frizzy Georgia humidity...' },
+      { id: 'wink', label: 'Quiff Wink', quip: 'Yes, the chestnut quiff is 100% keratin-smooth and aerodynamic.' },
+      { id: 'stance', label: 'Stylist Pose', quip: 'Ready for my close-up on North Main Street!' }
+    ];
+
+    let marcoCurrentStop = 0;
+    let marcoGestureIdx = 0;
+    let marcoActiveGesture = 'wave';
+    let marcoGestureTimer = 0;
+    let marcoAutoTourTimer = null;
+    let marcoSpinVel = 0;
+    let marcoScrollBoost = 0;
+    let marco3DReady = false;
+
+    function initMarco3D() {
+      const container = document.getElementById('marco-canvas-wrap');
+      if (!container || typeof THREE === 'undefined' || marco3DReady) return;
+      marco3DReady = true;
+
+      try {
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(36, 168 / 196, 0.1, 100);
+        camera.position.set(0, 0.25, 5.1);
+
+        const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+        renderer.setSize(168, 196);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+        container.appendChild(renderer.domElement);
+
+        // Crisp 3-point lighting + cool-sky rim light so Marco pops on both light & dark themes
+        scene.add(new THREE.AmbientLight(0xffffff, 0.78));
+        const keyLight = new THREE.DirectionalLight(0xfff4e0, 0.95);
+        keyLight.position.set(3, 5, 5);
+        scene.add(keyLight);
+        const rimLight = new THREE.DirectionalLight(0x60a5fa, 0.72);
+        rimLight.position.set(-4, 3, -3);
+        scene.add(rimLight);
+
+        const root = new THREE.Group();
+        scene.add(root);
+
+        // Standout Materials (Royal Cobalt, Barber-Crimson, Optic White, Chrome, Emerald-Teal)
+        const skinMat = new THREE.MeshStandardMaterial({ color: 0xf4c29f, roughness: 0.48 });
+        const cheekMat = new THREE.MeshStandardMaterial({ color: 0xec8a78, roughness: 0.6 });
+        const hairMat = new THREE.MeshStandardMaterial({ color: 0x5c341d, roughness: 0.42 });
+        const whiteMat = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.35 });
+        const cobaltMat = new THREE.MeshStandardMaterial({ color: 0x1d4ed8, roughness: 0.42 });
+        const crimsonMat = new THREE.MeshStandardMaterial({ color: 0xdc2626, roughness: 0.36 });
+        const navyMat = new THREE.MeshStandardMaterial({ color: 0x0f172a, roughness: 0.55 });
+        const skyMat = new THREE.MeshStandardMaterial({ color: 0x38bdf8, roughness: 0.45 });
+        const chromeMat = new THREE.MeshStandardMaterial({ color: 0xe2e8f0, metalness: 0.85, roughness: 0.15 });
+        const emeraldMat = new THREE.MeshStandardMaterial({ color: 0x10b981, roughness: 0.3 });
+        const eyeDarkMat = new THREE.MeshStandardMaterial({ color: 0x1e140c, roughness: 0.15 });
+        const irisMat = new THREE.MeshStandardMaterial({ color: 0x7c4d25, roughness: 0.25 });
+
+        // Rotating Barber-Pole Pedestal Ring beneath boots
+        const pedestalGroup = new THREE.Group();
+        pedestalGroup.position.y = -1.48;
+        const ringGeo = new THREE.TorusGeometry(0.76, 0.055, 12, 36);
+        const ring1 = new THREE.Mesh(ringGeo, crimsonMat);
+        ring1.rotation.x = Math.PI / 2;
+        const ring2 = new THREE.Mesh(new THREE.TorusGeometry(0.66, 0.04, 10, 32), cobaltMat);
+        ring2.rotation.x = Math.PI / 2;
+        pedestalGroup.add(ring1, ring2);
+        root.add(pedestalGroup);
+
+        // Character Group
+        const charGroup = new THREE.Group();
+        charGroup.position.y = -0.15;
+        root.add(charGroup);
+
+        // Legs & Oxblood Boots with White Soles
+        const leftLeg = new THREE.Group();
+        leftLeg.position.set(-0.24, -0.78, 0);
+        const rightLeg = new THREE.Group();
+        rightLeg.position.set(0.24, -0.78, 0);
+
+        [leftLeg, rightLeg].forEach(leg => {
+          const pant = new THREE.Mesh(new THREE.CylinderGeometry(0.14, 0.12, 0.52, 16), navyMat);
+          pant.position.y = -0.18;
+          const cuff = new THREE.Mesh(new THREE.CylinderGeometry(0.145, 0.145, 0.08, 16), skyMat);
+          cuff.position.y = -0.4;
+          const boot = new THREE.Mesh(new THREE.BoxGeometry(0.24, 0.16, 0.34), crimsonMat);
+          boot.position.set(0, -0.5, 0.06);
+          const sole = new THREE.Mesh(new THREE.BoxGeometry(0.26, 0.04, 0.36), whiteMat);
+          sole.position.set(0, -0.58, 0.06);
+          leg.add(pant, cuff, boot, sole);
+          charGroup.add(leg);
+        });
+
+        // Torso: Optic White Shirt + Royal Cobalt Apron + Crimson Bowtie
+        const torso = new THREE.Group();
+        torso.position.y = -0.22;
+        charGroup.add(torso);
+
+        const shirt = new THREE.Mesh(new THREE.CylinderGeometry(0.38, 0.42, 0.92, 20), whiteMat);
+        torso.add(shirt);
+
+        const apron = new THREE.Mesh(new THREE.CylinderGeometry(0.41, 0.47, 0.86, 20, 1, false, -Math.PI * 0.45, Math.PI * 0.9), cobaltMat);
+        apron.position.set(0, -0.04, 0.02);
+        torso.add(apron);
+
+        // Apron Pocket & Crimson Straps
+        const pocket = new THREE.Mesh(new THREE.BoxGeometry(0.32, 0.22, 0.08), skyMat);
+        pocket.position.set(0, -0.22, 0.43);
+        torso.add(pocket);
+
+        [-0.18, 0.18].forEach(sx => {
+          const strap = new THREE.Mesh(new THREE.BoxGeometry(0.065, 0.38, 0.05), crimsonMat);
+          strap.position.set(sx, 0.32, 0.37);
+          const buckle = new THREE.Mesh(new THREE.BoxGeometry(0.085, 0.06, 0.07), chromeMat);
+          buckle.position.set(sx, 0.22, 0.39);
+          torso.add(strap, buckle);
+        });
+
+        // Barber-Crimson Bowtie
+        const bowL = new THREE.Mesh(new THREE.ConeGeometry(0.08, 0.15, 6), crimsonMat);
+        bowL.rotation.z = -Math.PI / 2;
+        bowL.position.set(-0.08, 0.44, 0.36);
+        const bowR = new THREE.Mesh(new THREE.ConeGeometry(0.08, 0.15, 6), crimsonMat);
+        bowR.rotation.z = Math.PI / 2;
+        bowR.position.set(0.08, 0.44, 0.36);
+        const bowCenter = new THREE.Mesh(new THREE.SphereGeometry(0.045, 10, 10), crimsonMat);
+        bowCenter.position.set(0, 0.44, 0.38);
+        torso.add(bowL, bowR, bowCenter);
+
+        // Sculpted Clear Sunlit Head + Chestnut Quiff + Hazel Eyes
+        const headGroup = new THREE.Group();
+        headGroup.position.set(0, 0.62, 0);
+        charGroup.add(headGroup);
+
+        const neck = new THREE.Mesh(new THREE.CylinderGeometry(0.13, 0.15, 0.22, 14), skinMat);
+        neck.position.y = -0.34;
+        headGroup.add(neck);
+
+        const headMesh = new THREE.Mesh(new THREE.SphereGeometry(0.46, 28, 24), skinMat);
+        headMesh.scale.set(0.95, 1.06, 0.94);
+        headGroup.add(headMesh);
+
+        // Ears & Nose & Rosy Cheeks
+        [-0.43, 0.43].forEach(ex => {
+          const ear = new THREE.Mesh(new THREE.SphereGeometry(0.1, 12, 12), skinMat);
+          ear.position.set(ex, -0.02, 0);
+          headGroup.add(ear);
+        });
+        const nose = new THREE.Mesh(new THREE.SphereGeometry(0.075, 14, 14), skinMat);
+        nose.scale.set(0.9, 0.85, 1.2);
+        nose.position.set(0, -0.02, 0.43);
+        headGroup.add(nose);
+
+        [-0.22, 0.22].forEach(cx => {
+          const cheek = new THREE.Mesh(new THREE.SphereGeometry(0.075, 12, 12), cheekMat);
+          cheek.scale.set(1.2, 0.65, 0.4);
+          cheek.position.set(cx, -0.09, 0.39);
+          headGroup.add(cheek);
+        });
+
+        // Expressive Hazel Eyes + Blinking Eyelids
+        const pupils = [];
+        const eyelids = [];
+        [-0.16, 0.16].forEach(ex => {
+          const sclera = new THREE.Mesh(new THREE.SphereGeometry(0.09, 16, 16), whiteMat);
+          sclera.position.set(ex, 0.08, 0.38);
+          const iris = new THREE.Mesh(new THREE.SphereGeometry(0.055, 14, 14), irisMat);
+          iris.position.set(ex, 0.08, 0.44);
+          const pupil = new THREE.Mesh(new THREE.SphereGeometry(0.032, 12, 12), eyeDarkMat);
+          pupil.position.set(ex, 0.08, 0.47);
+          const glint = new THREE.Mesh(new THREE.SphereGeometry(0.015, 8, 8), whiteMat);
+          glint.position.set(ex + 0.02, 0.1, 0.485);
+          const brow = new THREE.Mesh(new THREE.BoxGeometry(0.15, 0.035, 0.04), hairMat);
+          brow.position.set(ex, 0.21, 0.41);
+          const lid = new THREE.Mesh(new THREE.SphereGeometry(0.094, 14, 10, 0, Math.PI * 2, 0, Math.PI * 0.5), skinMat);
+          lid.position.set(ex, 0.08, 0.385);
+          lid.scale.y = 0.05;
+          headGroup.add(sclera, iris, pupil, glint, brow, lid);
+          pupils.push(pupil);
+          eyelids.push(lid);
+        });
+
+        // Clean Smile
+        const smile = new THREE.Mesh(new THREE.TorusGeometry(0.11, 0.022, 8, 18, Math.PI), whiteMat);
+        smile.rotation.x = Math.PI;
+        smile.position.set(0, -0.14, 0.41);
+        headGroup.add(smile);
+
+        // Layered Warm Chestnut Salon Quiff (pulled cleanly off the face)
+        const hairCap = new THREE.Mesh(new THREE.SphereGeometry(0.47, 22, 18, 0, Math.PI * 2, 0, Math.PI * 0.52), hairMat);
+        hairCap.position.set(0, 0.08, -0.05);
+        hairCap.rotation.x = -0.25;
+        const quiff = new THREE.Mesh(new THREE.SphereGeometry(0.28, 18, 16), hairMat);
+        quiff.scale.set(1.55, 0.82, 1.05);
+        quiff.position.set(0.05, 0.46, 0.12);
+        quiff.rotation.z = 0.16;
+        headGroup.add(hairCap, quiff);
+
+        // Right Arm + Chrome-and-Crimson Shears
+        const rightArm = new THREE.Group();
+        rightArm.position.set(-0.46, 0.16, 0);
+        const rSleeve = new THREE.Mesh(new THREE.CylinderGeometry(0.11, 0.1, 0.48, 14), whiteMat);
+        rSleeve.position.y = -0.18;
+        const rHand = new THREE.Mesh(new THREE.SphereGeometry(0.1, 14, 14), skinMat);
+        rHand.position.y = -0.44;
+        const shearBlade1 = new THREE.Mesh(new THREE.BoxGeometry(0.04, 0.42, 0.015), chromeMat);
+        shearBlade1.position.set(0, -0.62, 0.08);
+        const shearRing = new THREE.Mesh(new THREE.TorusGeometry(0.06, 0.018, 8, 14), crimsonMat);
+        shearRing.position.set(0, -0.44, 0.08);
+        rightArm.add(rSleeve, rHand, shearBlade1, shearRing);
+        charGroup.add(rightArm);
+
+        // Left Arm + Bright Emerald-Teal Comb
+        const leftArm = new THREE.Group();
+        leftArm.position.set(0.46, 0.16, 0);
+        const lSleeve = new THREE.Mesh(new THREE.CylinderGeometry(0.11, 0.1, 0.48, 14), whiteMat);
+        lSleeve.position.y = -0.18;
+        const lHand = new THREE.Mesh(new THREE.SphereGeometry(0.1, 14, 14), skinMat);
+        lHand.position.y = -0.44;
+        const combBody = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.44, 0.03), emeraldMat);
+        combBody.position.set(0.04, -0.6, 0.08);
+        leftArm.add(lSleeve, lHand, combBody);
+        charGroup.add(leftArm);
+
+        // Pointer Eye-Tracking + Drag-to-Spin + Click-for-Gesture
+        let pointerX = 0, pointerY = 0;
+        let dragging = false, dragStartX = 0, draggedDist = 0;
+
+        window.addEventListener('mousemove', (e) => {
+          pointerX = (e.clientX / window.innerWidth) * 2 - 1;
+          pointerY = -(e.clientY / window.innerHeight) * 2 + 1;
+        });
+
+        container.addEventListener('mousedown', (e) => {
+          dragging = true;
+          dragStartX = e.clientX;
+          draggedDist = 0;
+        });
+        window.addEventListener('mousemove', (e) => {
+          if (!dragging) return;
+          const dx = e.clientX - dragStartX;
+          dragStartX = e.clientX;
+          draggedDist += Math.abs(dx);
+          marcoSpinVel += dx * 0.015;
+          if (draggedDist > 120) {
+            marcoReact('Whoa, easy!! I’m a luxury Buckhead barber, not a rotisserie chicken!');
+            draggedDist = 0;
+          }
+        });
+        window.addEventListener('mouseup', () => {
+          if (dragging && draggedDist < 8) triggerMarcoNextGesture();
+          dragging = false;
+        });
+
+        // Scroll-reactive velocity choreography
+        let lastScrollY = window.scrollY;
+        window.addEventListener('scroll', () => {
+          const dy = window.scrollY - lastScrollY;
+          lastScrollY = window.scrollY;
+          marcoScrollBoost = Math.max(-1, Math.min(1, dy * 0.04));
+        }, { passive: true });
+
+        // Animation Loop (Non-static living gestures)
+        const clock = new THREE.Clock();
+        let nextBlink = 2.5;
+        let nextIdleCycle = 4.5;
+
+        function animateMarco() {
+          requestAnimationFrame(animateMarco);
+          const dt = Math.min(0.05, clock.getDelta());
+          const t = clock.getElapsedTime();
+
+          // Rotate barber-pole pedestal
+          pedestalGroup.rotation.y += dt * 1.4;
+
+          // Spin inertia
+          root.rotation.y += marcoSpinVel;
+          marcoSpinVel *= 0.92;
+          if (Math.abs(marcoSpinVel) < 0.002) {
+            root.rotation.y += (0 - root.rotation.y) * 0.06;
+          }
+
+          // Smooth idle bounce + scroll stride
+          const stride = Math.abs(marcoScrollBoost) * 6;
+          charGroup.position.y = -0.15 + Math.sin(t * (2.6 + stride)) * 0.055;
+          leftLeg.rotation.x = Math.sin(t * 9) * marcoScrollBoost * 0.55;
+          rightLeg.rotation.x = -Math.sin(t * 9) * marcoScrollBoost * 0.55;
+          marcoScrollBoost *= 0.92;
+
+          // Eye & head cursor tracking
+          headGroup.rotation.y += (pointerX * 0.32 - headGroup.rotation.y) * 0.08;
+          headGroup.rotation.x += (-pointerY * 0.16 - headGroup.rotation.x) * 0.08;
+
+          // Periodic blinking
+          if (t > nextBlink) {
+            eyelids.forEach(l => { l.scale.y = 1.05; });
+            if (t > nextBlink + 0.12) {
+              eyelids.forEach(l => { l.scale.y = 0.05; });
+              nextBlink = t + 2.6 + Math.random() * 2.5;
+            }
+          }
+
+          // Auto-rotate subtle idle gestures every ~4.5s
+          if (t > nextIdleCycle) {
+            const idlePool = ['wave', 'snip', 'reveal', 'stance'];
+            marcoActiveGesture = idlePool[Math.floor(Math.random() * idlePool.length)];
+            nextIdleCycle = t + 4.5;
+          }
+
+          // Active Gesture Arm & Body Choreography
+          if (marcoActiveGesture === 'wave') {
+            rightArm.rotation.z = -2.35 + Math.sin(t * 10) * 0.38;
+            leftArm.rotation.z = 0.25;
+            torso.rotation.x = 0;
+          } else if (marcoActiveGesture === 'snip') {
+            rightArm.rotation.z = -1.55 + Math.sin(t * 16) * 0.22;
+            leftArm.rotation.z = 1.35 + Math.cos(t * 8) * 0.15;
+            shearBlade1.rotation.z = Math.sin(t * 22) * 0.3;
+          } else if (marcoActiveGesture === 'celebrate') {
+            rightArm.rotation.z = -2.75 + Math.sin(t * 12) * 0.25;
+            leftArm.rotation.z = 2.75 - Math.sin(t * 12) * 0.25;
+            charGroup.position.y += Math.abs(Math.sin(t * 7)) * 0.16;
+          } else if (marcoActiveGesture === 'bow') {
+            torso.rotation.x = 0.35;
+            rightArm.rotation.z = -0.8;
+            leftArm.rotation.z = 0.8;
+          } else if (marcoActiveGesture === 'salute') {
+            rightArm.rotation.z = -2.6;
+            leftArm.rotation.z = 0.2;
+            torso.rotation.x = 0;
+          } else if (marcoActiveGesture === 'think') {
+            rightArm.rotation.z = -1.9;
+            leftArm.rotation.z = 0.4;
+            headGroup.rotation.z = 0.16;
+          } else {
+            rightArm.rotation.z = -1.2 + Math.sin(t * 3) * 0.2;
+            leftArm.rotation.z = 1.2 - Math.sin(t * 3) * 0.2;
+            headGroup.rotation.z = Math.sin(t * 2) * 0.05;
+            torso.rotation.x = 0;
+          }
+
+          renderer.render(scene, camera);
+        }
+        animateMarco();
+      } catch (err) {
+        console.warn('Marco 3D fallback:', err);
+      }
+    }
+
+    function showMarcoGuide(isGrandEntrance = false) {
+      const root = document.getElementById('marco-guide-root');
+      const summon = document.getElementById('marco-summon-btn');
+      if (!root) return;
+      initMarco3D();
+      root.classList.add('is-visible');
+      if (summon) summon.style.display = 'none';
+      if (isGrandEntrance) {
+        marcoSpinVel = 0.28;
+        marcoActiveGesture = 'celebrate';
+        marcoReact(MARCO_STOPS[0].line, 'Grand Entry');
+      }
+    }
+
+    function hideMarcoGuide() {
+      const root = document.getElementById('marco-guide-root');
+      const summon = document.getElementById('marco-summon-btn');
+      if (marcoAutoTourTimer) toggleMarcoAutoTour();
+      if (root) root.classList.remove('is-visible');
+      if (summon) summon.style.display = 'inline-flex';
+    }
+
+    function marcoReact(text, pillText) {
+      const speech = document.getElementById('marco-speech');
+      const pill = document.getElementById('marco-gesture-pill');
+      if (speech && text) speech.textContent = text;
+      if (pill && pillText) pill.textContent = pillText;
+    }
+
+    function triggerMarcoNextGesture() {
+      marcoGestureIdx = (marcoGestureIdx + 1) % MARCO_GESTURES.length;
+      const g = MARCO_GESTURES[marcoGestureIdx];
+      marcoActiveGesture = g.id;
+      marcoReact(g.quip, g.label);
+    }
+
+    function marcoGoToSection(idx) {
+      marcoCurrentStop = idx % MARCO_STOPS.length;
+      const stop = MARCO_STOPS[marcoCurrentStop];
+      const target = document.getElementById(stop.id);
+      const root = document.getElementById('marco-guide-root');
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      if (root) root.classList.toggle('is-left', stop.side === 'left');
+      marcoActiveGesture = stop.gesture;
+      marcoScrollBoost = 0.85;
+      marcoReact(stop.line, stop.gesture);
+    }
+
+    function marcoNextStop() {
+      marcoGoToSection((marcoCurrentStop + 1) % MARCO_STOPS.length);
+    }
+
+    function toggleMarcoAutoTour() {
+      const btn = document.getElementById('marco-autotour-btn');
+      if (marcoAutoTourTimer) {
+        clearInterval(marcoAutoTourTimer);
+        marcoAutoTourTimer = null;
+        if (btn) btn.textContent = 'Auto Tour';
+      } else {
+        marcoNextStop();
+        marcoAutoTourTimer = setInterval(marcoNextStop, 4800);
+        if (btn) btn.textContent = 'Stop Tour';
+      }
+    }
+
+    /* ========================================================================
+       11. BOOTSTRAP ENTIRE ATELIER
+       ======================================================================== */
+    let atelierBootstrapped = false;
+
+    function bootstrapAtelier() {
+      if (atelierBootstrapped) return;
+      atelierBootstrapped = true;
+
+      try {
+        renderLookbook();
+        initCategoryBar();
+        renderServiceLedger();
+        renderSensoryStages();
+        initAtelierToolsShowcase();
+        initToolMotionCanvas();
+        renderTriage();
+        populateBookingSelect();
+        updateSalonLiveStatus();
+        initPersistentScrollAnimations();
+        initCustomCursorAndMagnets();
+        initSilkWaveFooter();
+        setupAutoAudioUnlock();
+        bindHeaderAudioInteractions();
+        startSalonIntro();
+      } catch (err) {
+        console.error('Atelier startup error:', err);
+        document.body.classList.add('header-ready', 'hero-unveiled');
+        const intro = document.getElementById('salon-intro');
+        if (intro) intro.classList.add('is-hidden');
+      }
+    }
+
+    if (document.readyState === 'loading') {
+      window.addEventListener('DOMContentLoaded', bootstrapAtelier);
+    } else {
+      bootstrapAtelier();
+    }
+  </script>
+</body>
+</html>
